@@ -597,6 +597,25 @@ a { color: inherit; text-decoration: none; }
 }
 .contact__email:hover { color: var(--accent); }
 
+.contact__social {
+  margin-top: 52px;
+  display: flex; gap: 56px;
+}
+.contact__social-link {
+  display: flex; align-items: baseline; gap: 20px;
+  text-decoration: none;
+}
+.contact__social-link:hover .contact__social-handle { color: var(--accent); }
+.contact__social-platform {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--accent); opacity: 0.65; flex-shrink: 0;
+}
+.contact__social-handle {
+  font-family: var(--serif); font-size: clamp(28px, 4vw, 58px);
+  font-weight: 300; letter-spacing: -0.01em; color: var(--text);
+  transition: color 0.2s;
+}
+
 
 /* ─── FOOTER ─── */
 .footer {
@@ -604,16 +623,22 @@ a { color: inherit; text-decoration: none; }
   padding: 24px var(--px);
   display: flex; justify-content: space-between;
   font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; color: var(--muted); opacity: 0.4;
+  letter-spacing: 0.1em; color: rgba(86,83,74,0.55);
 }
+.footer__link {
+  color: inherit; text-decoration: none;
+  transition: color 0.2s;
+}
+.footer__link:hover { color: var(--accent); }
 
 
 /* ─── FADE IN ─── */
 .v4-fade {
   opacity: 0; transform: translateY(24px);
   transition: opacity 0.75s ease, transform 0.75s ease;
+  will-change: opacity, transform;
 }
-.v4-fade.is-visible { opacity: 1; transform: none; }
+.v4-fade.is-visible { opacity: 1; transform: none; will-change: auto; }
 
 
 /* ─── RESPONSIVE ─── */
