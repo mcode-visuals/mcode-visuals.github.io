@@ -1,0 +1,15 @@
+.DS_Store
+*.mov
+Thumbs.db
+v2.html
+v2.css
+v2.js
+v3.html
+v3.css
+v3.js
+main.js
+style.css
+print.html
+print_v2.html
+print_v3.html
+mcode-portfolio-*.pdf
