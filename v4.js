@@ -149,6 +149,9 @@ if (emailLink && emailHint) {
   const box = document.createElement('div');
   box.className = 'lightbox';
   box.hidden = true;
+  box.setAttribute('role', 'dialog');
+  box.setAttribute('aria-modal', 'true');
+  box.setAttribute('aria-label', 'Media viewer');
   box.innerHTML = `
     <div class="lightbox__stage"></div>
     <div class="lightbox__bar">
@@ -194,21 +197,34 @@ if (emailLink && emailHint) {
     counter.textContent = `${pad(current + 1)} / ${pad(items.length)}`;
   }
 
+  let lastFocused = null;
+
   function open(i) {
+    lastFocused = document.activeElement;
     show(i);
     box.hidden = false;
     document.body.style.overflow = 'hidden';
+    box.querySelector('.lightbox__btn--close').focus();
   }
 
   function close() {
     box.hidden = true;
     stage.innerHTML = '';
     document.body.style.overflow = '';
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
   }
 
   items.forEach((el, i) => {
     el.classList.add('lb-target');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'button');
+    if (!el.getAttribute('aria-label') && !el.alt) {
+      el.setAttribute('aria-label', 'View media larger');
+    }
     el.addEventListener('click', () => open(i));
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); }
+    });
   });
 
   box.addEventListener('click', (e) => {
@@ -226,6 +242,14 @@ if (emailLink && emailHint) {
     if (e.key === 'Escape') close();
     else if (e.key === 'ArrowLeft') show(current - 1);
     else if (e.key === 'ArrowRight') show(current + 1);
+    else if (e.key === 'Tab') {
+      // trap focus within the lightbox controls
+      const focusables = [...box.querySelectorAll('.lightbox__btn')];
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!box.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    }
   });
 })();
 
@@ -340,6 +364,7 @@ if (emailLink && emailHint) {
     echoEls = ECHO_DELAYS.map((_, i) => {
       const el = document.createElement('span');
       el.className = 'cursor-echo';
+      el.setAttribute('aria-hidden', 'true');
       el.textContent = '+';
       el.style.opacity = String(0.3 - i * 0.09);
       document.body.appendChild(el);
