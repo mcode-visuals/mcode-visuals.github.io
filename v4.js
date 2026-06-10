@@ -143,7 +143,8 @@ if (emailLink && emailHint) {
 // Ambient backgrounds (.room__bg, .intro__bg) stay non-interactive.
 (() => {
   const items = [...document.querySelectorAll('.section img, .section video')]
-    .filter((el) => !el.closest('.room__bg') && !el.closest('.intro__bg'));
+    .filter((el) => !el.closest('.room__bg') && !el.closest('.intro__bg')
+                 && !el.classList.contains('setlist__alt'));
   if (!items.length) return;
 
   const box = document.createElement('div');
@@ -252,6 +253,31 @@ if (emailLink && emailHint) {
     }
   });
 })();
+
+
+// ─── Setlist hover crossfade ──────────────────────────────────────────────────
+// Second clip loads on first hover only, fades in once it's actually playing.
+document.querySelectorAll('.setlist__item').forEach((item) => {
+  const alt = item.querySelector('.setlist__alt');
+  if (!alt) return;
+  let hovered = false;
+
+  alt.addEventListener('playing', () => {
+    if (hovered) item.classList.add('is-alt');
+  });
+
+  item.addEventListener('mouseenter', () => {
+    hovered = true;
+    if (!alt.src) alt.src = alt.dataset.altSrc;
+    alt.play().catch(() => {});
+  });
+
+  item.addEventListener('mouseleave', () => {
+    hovered = false;
+    item.classList.remove('is-alt');
+    alt.pause();
+  });
+});
 
 
 // ─── Generative layer ─────────────────────────────────────────────────────────
