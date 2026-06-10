@@ -140,6 +140,8 @@ a { color: inherit; text-decoration: none; }
   .glitch-wrap::after { animation: none; }
   .glitch-wrap::before { clip-path: inset(30% 0 68% 0); transform: translate(3px, 0); }
   .glitch-wrap::after  { clip-path: inset(65% 0 28% 0); transform: translate(-3px, 0); }
+  .v4-fade { opacity: 1; transform: none; transition: none; }
+  .intro__index.is-visible .intro__index-item { animation: none; }
 }
 
 
@@ -278,6 +280,18 @@ a { color: inherit; text-decoration: none; }
 .intro__index-item:nth-child(odd)  { padding-right: 48px; }
 .intro__index-item:nth-child(even) { padding-left: 48px; border-left: 1px solid var(--border); }
 
+/* Cascade reveal — rows stagger in once the parent .v4-fade becomes visible.
+   Animation (not transition) so the per-row delay never affects hover. */
+.intro__index.is-visible .intro__index-item { animation: index-rise 0.6s ease backwards; }
+.intro__index.is-visible .intro__index-item:nth-child(2) { animation-delay: 0.08s; }
+.intro__index.is-visible .intro__index-item:nth-child(3) { animation-delay: 0.16s; }
+.intro__index.is-visible .intro__index-item:nth-child(4) { animation-delay: 0.24s; }
+.intro__index.is-visible .intro__index-item:nth-child(5) { animation-delay: 0.32s; }
+.intro__index.is-visible .intro__index-item:nth-child(6) { animation-delay: 0.40s; }
+@keyframes index-rise {
+  from { opacity: 0; transform: translateY(16px); }
+}
+
 .intro__index-num {
   font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
   color: var(--accent); opacity: 0.65; min-width: 24px; flex-shrink: 0;
@@ -312,13 +326,15 @@ a { color: inherit; text-decoration: none; }
   padding: 200px var(--px) 0;
 }
 
-.section__meta {
+.section__meta,
+.room__meta {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em;
   text-transform: uppercase; color: var(--accent); opacity: 0.75;
   margin-bottom: 36px;
   display: flex; gap: 16px; align-items: center;
 }
-.section__meta-sep { opacity: 0.3; }
+.section__meta-sep,
+.room__meta-sep { opacity: 0.3; }
 
 .section__title {
   font-family: var(--serif);
@@ -361,13 +377,6 @@ a { color: inherit; text-decoration: none; }
   padding: 0 var(--px) 160px;
 }
 
-.room__meta {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.26em;
-  text-transform: uppercase; color: var(--accent); opacity: 0.75;
-  margin-bottom: 36px; display: flex; gap: 16px; align-items: center;
-}
-.room__meta-sep { opacity: 0.3; }
-
 .room__title {
   font-family: var(--serif);
   font-size: clamp(64px, 11vw, 148px);
@@ -403,7 +412,7 @@ a { color: inherit; text-decoration: none; }
 
 /* 4-channel strip */
 .som__channels {
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-template-columns: repeat(5, 1fr);
   gap: 6px; height: 52vh; margin: 20px var(--px) 0;
   position: relative; z-index: 1;
 }
@@ -514,6 +523,9 @@ a { color: inherit; text-decoration: none; }
 .bette__below { height: 240px; position: relative; z-index: 1; }
 
 
+/* Setlist section — tighter header so the flag doesn't stale-stick above empty space */
+#sets .section__header { padding-top: 72px; }
+
 /* ─── SETLIST (VJ sets 2×2) ─── */
 .setlist__grid {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -548,6 +560,11 @@ a { color: inherit; text-decoration: none; }
   margin-top: 12px; font-family: var(--mono);
   font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
 }
+
+/* Cascade reveal — items entering the viewport together stagger left-to-right, top-to-bottom */
+.setlist__grid .setlist__item:nth-child(2) { transition-delay: 0.1s; }
+.setlist__grid .setlist__item:nth-child(3) { transition-delay: 0.2s; }
+.setlist__grid .setlist__item:nth-child(4) { transition-delay: 0.3s; }
 
 
 /* ─── ABOUT ─── */
@@ -644,7 +661,8 @@ a { color: inherit; text-decoration: none; }
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1100px) {
   .som__body { grid-template-columns: 1fr; gap: 56px; padding: 80px var(--px) 120px; }
-  .som__channels { grid-template-columns: repeat(2, 1fr); height: 60vh; }
+  .som__channels { grid-template-columns: repeat(3, 1fr); height: auto; }
+  .som-ch { height: 36vh; }
   .about { grid-template-columns: 1fr; gap: 64px; padding: 100px var(--px) 120px; }
   .intro__index { grid-template-columns: 1fr; }
   .intro__index-item:nth-child(even) { padding-left: 0; border-left: none; }
@@ -652,7 +670,23 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 700px) {
   :root { --px: 28px; }
-  .sidenav { display: none; }
+
+  /* Side nav docks to the bottom as a horizontal bar */
+  .sidenav {
+    top: auto; right: 0; left: 0; bottom: 0; transform: none;
+    flex-direction: row; justify-content: center;
+    padding: 8px 0 12px;
+    background: rgba(8,8,7,0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border);
+    z-index: 150;
+  }
+  .sidenav__line { width: 18px; height: 1px; flex: none; min-height: 0; align-self: center; }
+  .sidenav a { padding: 6px 10px; }
+
+  .cursor-coords { display: none; }
+  .footer { padding-bottom: 56px; }
   .som__channels { grid-template-columns: 1fr; height: auto; }
   .som-ch { height: 40vh; }
   .som__more { grid-template-columns: repeat(2, 1fr); }
