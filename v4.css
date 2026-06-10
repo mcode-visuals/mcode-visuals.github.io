@@ -675,6 +675,50 @@ a { color: inherit; text-decoration: none; }
 .setlist__grid .setlist__item:nth-child(4) { transition-delay: 0.3s; }
 
 
+/* ─── TRANSMISSION LOG ─── */
+.log {
+  padding: 140px var(--px) 180px;
+  position: relative; z-index: 1;
+}
+
+.log__head { margin-bottom: 72px; }
+.log__tag {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 28px;
+}
+.log__title-main {
+  font-family: var(--serif); font-size: clamp(40px, 6vw, 84px);
+  font-weight: 300; letter-spacing: -0.02em; line-height: 1.0;
+}
+
+.log__list { list-style: none; border-top: 1px solid var(--border); }
+.log__row {
+  display: grid;
+  grid-template-columns: 170px 1fr 1fr 110px;
+  gap: 28px; align-items: baseline;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+}
+.log__date {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent); opacity: 0.7;
+}
+.log__name {
+  font-family: var(--serif); font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 400; letter-spacing: -0.01em; color: var(--text);
+  transition: color 0.2s;
+}
+.log__name:hover { color: var(--accent); }
+.log__venue {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.log__type {
+  font-family: var(--mono); font-size: 8px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted); text-align: right;
+}
+
+
 /* ─── ABOUT ─── */
 .about {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -865,6 +909,14 @@ a { color: inherit; text-decoration: none; }
   .bette__vid-row { grid-template-columns: 1fr 1fr; }
   .bette__vid-row--4 { grid-template-columns: repeat(2, 1fr); }
   .setlist__grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 44vh); }
+  .log__row {
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px; padding: 18px 0;
+  }
+  .log__date { order: 1; }
+  .log__type { order: 2; }
+  .log__name { order: 3; grid-column: 1 / -1; }
+  .log__venue { order: 4; grid-column: 1 / -1; }
   .intro__index { grid-template-columns: 1fr; }
   .section__header { padding: 100px var(--px) 0; }
   .room__content { padding: 0 var(--px) 100px; }
