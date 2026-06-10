@@ -19,12 +19,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="v4.css">
+  <link rel="stylesheet" href="v4.css?v=5">
 </head>
 <body>
 
   <!-- Fixed overlays -->
-  <div class="rec-indicator"><div class="rec-dot"></div>LIVE</div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="rec-indicator"><div class="rec-dot"></div>LIVE&nbsp;<span id="rec-time"></span></div>
 
   <nav class="sidenav" aria-label="Project navigation">
     <div class="sidenav__line"></div>
@@ -571,9 +572,10 @@
 
     <div class="contact">
       <span class="contact__tag">// Contact</span>
-      <a href="mailto:m.scandola1998@gmail.com" class="contact__email">
+      <a href="mailto:m.scandola1998@gmail.com" class="contact__email" id="contact-email">
         m.scandola1998@gmail.com
       </a>
+      <span class="contact__hint" id="email-hint">// click to copy</span>
       <div class="contact__social">
         <a href="https://www.instagram.com/_m.code_/" class="contact__social-link" target="_blank" rel="noopener noreferrer">
           <span class="contact__social-platform">Instagram</span>
@@ -590,6 +592,6 @@
     <span>2025–2026</span>
   </footer>
 
-  <script src="v4.js"></script>
+  <script src="v4.js?v=5"></script>
 </body>
 </html>
