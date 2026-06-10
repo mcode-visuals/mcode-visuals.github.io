@@ -577,13 +577,6 @@ a { color: inherit; text-decoration: none; }
   filter: saturate(0.72) contrast(1.05);
 }
 
-/* Portrait pair */
-.bette__portrait-row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-  height: 72vh; margin: 20px var(--px) 0; position: relative; z-index: 1;
-}
-.bette__portrait-row video { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.72); }
-
 /* Photo strip */
 .bette__strip {
   display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
@@ -769,7 +762,6 @@ a { color: inherit; text-decoration: none; }
   .bette__strip { grid-template-columns: repeat(3, 1fr); }
   .bette__vid-row { grid-template-columns: 1fr 1fr; }
   .bette__vid-row--4 { grid-template-columns: repeat(2, 1fr); }
-  .bette__portrait-row { height: 55vw; }
   .setlist__grid { grid-template-columns: 1fr; grid-template-rows: repeat(4, 44vh); }
   .intro__index { grid-template-columns: 1fr; }
   .section__header { padding: 100px var(--px) 0; }
