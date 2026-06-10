@@ -228,3 +228,191 @@ if (emailLink && emailHint) {
     else if (e.key === 'ArrowRight') show(current + 1);
   });
 })();
+
+
+// ─── Generative layer ─────────────────────────────────────────────────────────
+// Four systems sharing one rAF loop:
+//   1. Proximity field — the intro runs an agent/connection system (the
+//      Proximity piece itself); the visitor's cursor joins as an agent.
+//   2. Presence echoes — ghost crosshairs trail the cursor through time
+//      (State V: "you are here, and you were here, and both are true").
+//   3. Signal interference — fast scrolling degrades the signal: grain
+//      thickens and horizontal tear bands jitter until it settles.
+//   4. Ghost number parallax — section numbers drift against the scroll.
+(() => {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+  const root = document.documentElement;
+
+  // — 1. Proximity field —
+  const canvas = document.querySelector('.intro__net');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+  const COUNT = window.innerWidth < 700 ? 42 : 88;
+  const LINK = 110;          // px — connection distance
+  const CURSOR_LINK = 170;   // px — cursor connection distance
+  let pts = [], W = 0, H = 0, canvasTop = 0, introVisible = true;
+  const mouse = { x: -1e4, y: -1e4 };
+
+  function sizeCanvas() {
+    if (!canvas) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    canvasTop = canvas.getBoundingClientRect().top + window.scrollY;
+  }
+
+  function seedPoints() {
+    pts = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+    }));
+  }
+
+  function drawField() {
+    ctx.clearRect(0, 0, W, H);
+    const mx = mouse.x, my = mouse.y - (canvasTop - window.scrollY);
+
+    for (const p of pts) {
+      if (!reduced) {
+        // gentle pull toward the cursor-agent
+        const dx = mx - p.x, dy = my - p.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < CURSOR_LINK * CURSOR_LINK && d2 > 1) {
+          const d = Math.sqrt(d2);
+          p.vx += (dx / d) * 0.012;
+          p.vy += (dy / d) * 0.012;
+        }
+        p.vx = Math.max(-0.5, Math.min(0.5, p.vx));
+        p.vy = Math.max(-0.5, Math.min(0.5, p.vy));
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < -20) p.x = W + 20; else if (p.x > W + 20) p.x = -20;
+        if (p.y < -20) p.y = H + 20; else if (p.y > H + 20) p.y = -20;
+      }
+    }
+
+    // point-to-point connections
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i];
+      for (let j = i + 1; j < pts.length; j++) {
+        const b = pts[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < LINK * LINK) {
+          const alpha = (1 - Math.sqrt(d2) / LINK) * 0.15;
+          ctx.strokeStyle = `rgba(240,239,233,${alpha.toFixed(3)})`;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+      ctx.fillStyle = 'rgba(240,239,233,0.45)';
+      ctx.fillRect(a.x - 0.75, a.y - 0.75, 1.5, 1.5);
+    }
+
+    // cursor-to-point connections — the visitor as an agent, in accent
+    if (finePointer) {
+      for (const p of pts) {
+        const dx = p.x - mx, dy = p.y - my;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < CURSOR_LINK * CURSOR_LINK) {
+          const alpha = (1 - Math.sqrt(d2) / CURSOR_LINK) * 0.22;
+          ctx.strokeStyle = `rgba(0,229,255,${alpha.toFixed(3)})`;
+          ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(p.x, p.y); ctx.stroke();
+        }
+      }
+    }
+  }
+
+  if (canvas) {
+    sizeCanvas(); seedPoints();
+    window.addEventListener('resize', () => { sizeCanvas(); seedPoints(); });
+    new IntersectionObserver((entries) => {
+      introVisible = entries[0].isIntersecting;
+    }).observe(canvas);
+  }
+
+  document.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+  // — 2. Presence echoes —
+  const ECHO_DELAYS = [300, 600, 900]; // ms behind the cursor
+  const trail = [];                    // ring buffer of {x, y, t}
+  let echoEls = [];
+  if (finePointer && !reduced) {
+    echoEls = ECHO_DELAYS.map((_, i) => {
+      const el = document.createElement('span');
+      el.className = 'cursor-echo';
+      el.textContent = '+';
+      el.style.opacity = String(0.3 - i * 0.09);
+      document.body.appendChild(el);
+      return el;
+    });
+  }
+
+  function drawEchoes(now) {
+    if (!echoEls.length) return;
+    trail.push({ x: mouse.x, y: mouse.y, t: now });
+    while (trail.length > 90) trail.shift();
+    echoEls.forEach((el, i) => {
+      const target = now - ECHO_DELAYS[i];
+      let pos = null;
+      for (let k = trail.length - 1; k >= 0; k--) {
+        if (trail[k].t <= target) { pos = trail[k]; break; }
+      }
+      if (pos) el.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
+    });
+  }
+
+  // — 3. Signal interference —
+  const itfBands = [...document.querySelectorAll('.interference span')];
+  let lastScrollY = window.scrollY;
+  let interference = 0;
+
+  function drawInterference() {
+    const dy = Math.abs(window.scrollY - lastScrollY);
+    lastScrollY = window.scrollY;
+    interference = Math.max(interference * 0.88, Math.min(1, dy / 110));
+    if (interference < 0.02) {
+      if (interference !== 0) { interference = 0; root.style.setProperty('--itf', '0'); }
+      itfBands.forEach((b) => { b.style.opacity = '0'; });
+      return;
+    }
+    root.style.setProperty('--itf', interference.toFixed(3));
+    itfBands.forEach((b) => {
+      b.style.top = (Math.random() * 100) + '%';
+      b.style.transform = `translateX(${((Math.random() - 0.5) * 60 * interference).toFixed(1)}px)`;
+      b.style.opacity = (interference * 0.5).toFixed(3);
+    });
+  }
+
+  // — 4. Ghost number parallax —
+  const ghosts = [...document.querySelectorAll('.section__ghost')].map((el) => ({
+    el, section: el.closest('.section'),
+  }));
+
+  function drawParallax() {
+    const vh = window.innerHeight;
+    const moves = [];
+    for (const g of ghosts) {
+      const r = g.section.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > vh) continue;
+      const progress = (vh - r.top) / (vh + r.height); // 0 entering → 1 leaving
+      moves.push([g.el, (progress - 0.5) * -130]);
+    }
+    for (const [el, ty] of moves) el.style.transform = `translateY(${ty.toFixed(1)}px)`;
+  }
+
+  // — shared loop —
+  let lastParallaxY = -1;
+  function loop(now) {
+    if (canvas && introVisible) drawField();
+    if (!reduced) {
+      drawEchoes(now);
+      drawInterference();
+      if (window.scrollY !== lastParallaxY) {
+        lastParallaxY = window.scrollY;
+        drawParallax();
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();

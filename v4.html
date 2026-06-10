@@ -19,12 +19,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="v4.css?v=5">
+  <link rel="stylesheet" href="v4.css?v=6">
 </head>
 <body>
 
   <!-- Fixed overlays -->
   <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="interference" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="rec-indicator"><div class="rec-dot"></div>LIVE&nbsp;<span id="rec-time"></span></div>
 
   <nav class="sidenav" aria-label="Project navigation">
@@ -57,6 +58,7 @@
         <source src="assets/states-of-motion/optical.mp4" type="video/mp4">
       </video>
     </div>
+    <canvas class="intro__net" aria-hidden="true"></canvas>
 
     <div class="intro__center">
       <p class="intro__badge">// SIGNAL — PORTFOLIO 2025–2026</p>
@@ -592,6 +594,6 @@
     <span>2025–2026</span>
   </footer>
 
-  <script src="v4.js?v=5"></script>
+  <script src="v4.js?v=6"></script>
 </body>
 </html>
