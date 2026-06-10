@@ -299,7 +299,7 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
   const ctx = canvas ? canvas.getContext('2d') : null;
   const COUNT = window.innerWidth < 700 ? 42 : 88;
   const LINK = 110;          // px — connection distance
-  const CURSOR_LINK = 170;   // px — cursor connection distance
+  const CURSOR_LINK = 240;   // px — cursor connection distance
   let pts = [], W = 0, H = 0, canvasTop = 0, introVisible = true;
   const mouse = { x: -1e4, y: -1e4 };
 
@@ -330,11 +330,11 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
         const d2 = dx * dx + dy * dy;
         if (d2 < CURSOR_LINK * CURSOR_LINK && d2 > 1) {
           const d = Math.sqrt(d2);
-          p.vx += (dx / d) * 0.012;
-          p.vy += (dy / d) * 0.012;
+          p.vx += (dx / d) * 0.035;
+          p.vy += (dy / d) * 0.035;
         }
-        p.vx = Math.max(-0.5, Math.min(0.5, p.vx));
-        p.vy = Math.max(-0.5, Math.min(0.5, p.vy));
+        p.vx = Math.max(-0.9, Math.min(0.9, p.vx));
+        p.vy = Math.max(-0.9, Math.min(0.9, p.vy));
         p.x += p.vx; p.y += p.vy;
         if (p.x < -20) p.x = W + 20; else if (p.x > W + 20) p.x = -20;
         if (p.y < -20) p.y = H + 20; else if (p.y > H + 20) p.y = -20;
@@ -359,15 +359,29 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
     }
 
     // cursor-to-point connections — the visitor as an agent, in accent
-    if (finePointer) {
+    if (finePointer && mx > -100 && my > -100 && my < H + 100) {
+      let linked = false;
       for (const p of pts) {
         const dx = p.x - mx, dy = p.y - my;
         const d2 = dx * dx + dy * dy;
         if (d2 < CURSOR_LINK * CURSOR_LINK) {
-          const alpha = (1 - Math.sqrt(d2) / CURSOR_LINK) * 0.22;
-          ctx.strokeStyle = `rgba(0,229,255,${alpha.toFixed(3)})`;
+          linked = true;
+          const t = 1 - Math.sqrt(d2) / CURSOR_LINK;
+          ctx.strokeStyle = `rgba(0,229,255,${(t * 0.55).toFixed(3)})`;
+          ctx.lineWidth = 1 + t * 0.6;
           ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(p.x, p.y); ctx.stroke();
+          // linked points light up in accent
+          ctx.fillStyle = `rgba(0,229,255,${(0.3 + t * 0.6).toFixed(3)})`;
+          ctx.fillRect(p.x - 1.25, p.y - 1.25, 2.5, 2.5);
         }
+      }
+      ctx.lineWidth = 1;
+      // the cursor-agent itself: accent node + halo ring
+      if (linked) {
+        ctx.fillStyle = 'rgba(0,229,255,0.9)';
+        ctx.fillRect(mx - 1.5, my - 1.5, 3, 3);
+        ctx.strokeStyle = 'rgba(0,229,255,0.18)';
+        ctx.beginPath(); ctx.arc(mx, my, 26, 0, Math.PI * 2); ctx.stroke();
       }
     }
   }
@@ -392,7 +406,8 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
       el.className = 'cursor-echo';
       el.setAttribute('aria-hidden', 'true');
       el.textContent = '+';
-      el.style.opacity = String(0.3 - i * 0.09);
+      el.style.opacity = String(0.65 - i * 0.2);
+      el.style.fontSize = (16 - i * 3) + 'px';
       document.body.appendChild(el);
       return el;
     });
