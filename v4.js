@@ -182,7 +182,7 @@ if (emailLink && emailHint) {
       stage.appendChild(v);
     } else {
       const img = new Image();
-      img.src = el.currentSrc || el.src;
+      img.src = el.src; // always the full-size asset, not a srcset variant
       img.alt = el.alt || '';
       stage.appendChild(img);
     }
