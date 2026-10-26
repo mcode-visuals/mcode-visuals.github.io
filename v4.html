@@ -2,10 +2,792 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=./">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio of Matteo Scandola (m.code), visual artist, researcher and VJ based in Paris. Real-time audiovisual installations and live visuals made with TouchDesigner: Messico e Nuvole, States of Motion, Proximity.">
+  <meta name="theme-color" content="#080807">
+  <meta property="og:title" content="Matteo Scandola — m.code · Visual Artist, VJ &amp; Researcher">
+  <meta property="og:description" content="Real-time audiovisual installations and live visuals. Verona / Paris. Messico e Nuvole, States of Motion, Proximity.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="m.code">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:image:alt" content="Messico e Nuvole — suspended mesh clouds lit in blue, Alcova stage, Komorebi 2026">
+  <meta property="og:url" content="https://skandiz.github.io/mcode-portfolio/">
+  <meta property="og:image" content="https://skandiz.github.io/mcode-portfolio/assets/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="800">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Matteo Scandola — m.code · Visual Artist, VJ &amp; Researcher">
+  <meta name="twitter:description" content="Real-time audiovisual installations and live visuals. Verona / Paris.">
+  <meta name="twitter:image" content="https://skandiz.github.io/mcode-portfolio/assets/og.jpg">
+  <meta name="author" content="Matteo Scandola">
+  <meta name="robots" content="index, follow, max-image-preview:large">
   <link rel="canonical" href="https://skandiz.github.io/mcode-portfolio/">
-  <meta name="robots" content="noindex">
-  <title>m.code</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23080807'/><text x='16' y='23' font-size='20' text-anchor='middle' fill='%2300e5ff' font-family='Georgia,serif' font-weight='300'>m</text></svg>">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://skandiz.github.io/mcode-portfolio/#website",
+      "url": "https://skandiz.github.io/mcode-portfolio/",
+      "name": "m.code — Matteo Scandola",
+      "inLanguage": "en"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://skandiz.github.io/mcode-portfolio/#person",
+      "name": "Matteo Scandola",
+      "alternateName": [
+        "m.code",
+        "mcode",
+        "_m.code_"
+      ],
+      "url": "https://skandiz.github.io/mcode-portfolio/",
+      "image": "https://skandiz.github.io/mcode-portfolio/assets/og.jpg",
+      "jobTitle": "Visual artist, researcher and VJ",
+      "description": "Visual artist and researcher based in Paris working with real-time audiovisual systems, emergence and feedback. Background in physics; works with TouchDesigner.",
+      "birthPlace": "Verona, Italy",
+      "homeLocation": {
+        "@type": "Place",
+        "name": "Paris, France"
+      },
+      "knowsAbout": [
+        "TouchDesigner",
+        "VJing",
+        "audiovisual installation",
+        "generative art",
+        "real-time visuals",
+        "feedback systems"
+      ],
+      "sameAs": [
+        "https://www.instagram.com/_m.code_/"
+      ]
+    }
+  ]
+}
+  </script>
+  <title>Matteo Scandola — m.code · Visual Artist, VJ &amp; Researcher · Paris</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="v4.css?v=16">
 </head>
-<body><a href="./">m.code &mdash; Matteo Scandola</a></body>
+<body>
+
+  <!-- Fixed overlays -->
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="interference" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="rec-indicator" aria-hidden="true"><div class="rec-dot"></div>LIVE&nbsp;<span id="rec-time"></span></div>
+
+  <nav class="sidenav" aria-label="Project navigation">
+    <div class="sidenav__line"></div>
+    <a href="#mene"    data-id="mene">01</a>
+    <div class="sidenav__line"></div>
+    <a href="#som"     data-id="som">02</a>
+    <div class="sidenav__line"></div>
+    <a href="#prox"    data-id="prox">03</a>
+    <div class="sidenav__line"></div>
+    <a href="#nails"   data-id="nails">04</a>
+    <div class="sidenav__line"></div>
+    <a href="#inwards" data-id="inwards">05</a>
+    <div class="sidenav__line"></div>
+    <a href="#bette"   data-id="bette">06</a>
+    <div class="sidenav__line"></div>
+    <a href="#sets"    data-id="sets">07</a>
+    <div class="sidenav__line"></div>
+    <a href="#log"     data-id="log">TX</a>
+    <div class="sidenav__line"></div>
+    <a href="#about"   data-id="about">08</a>
+    <div class="sidenav__line"></div>
+  </nav>
+
+  <div class="cursor-coords" id="cursor-coords" aria-hidden="true">0000 · 0000</div>
+
+
+  <!-- ════════════════════════════════════
+       INTRO
+  ════════════════════════════════════ -->
+  <section class="intro" id="home">
+    <div class="intro__bg">
+      <video aria-hidden="true" autoplay muted loop playsinline preload="auto" poster="assets/posters/states-of-motion_optical.jpg">
+        <source src="assets/states-of-motion/optical.mp4" type="video/mp4">
+      </video>
+    </div>
+    <canvas class="intro__net" aria-hidden="true"></canvas>
+
+    <div class="intro__center">
+      <p class="intro__badge">// SIGNAL — PORTFOLIO 2025–2026</p>
+      <h1 class="intro__name">
+        <span class="sr-only">Matteo Scandola &mdash; </span>        <span class="glitch-wrap" data-text="m.code">m.code</span>
+      </h1>
+      <p class="intro__real">Matteo Scandola</p>
+      <div class="intro__rule"></div>
+      <p class="intro__discipline">Visual Artist &middot; Researcher &middot; VJ</p>
+      <p class="intro__location">Verona &mdash; Paris</p>
+    </div>
+
+    <div class="intro__index v4-fade">
+      <a class="intro__index-item" href="#mene">
+        <span class="intro__index-num">01</span>
+        <span class="intro__index-title">Messico e Nuvole</span>
+        <span class="intro__index-type">Installation</span>
+      </a>
+      <a class="intro__index-item" href="#som">
+        <span class="intro__index-num">02</span>
+        <span class="intro__index-title">States of Motion</span>
+        <span class="intro__index-type">Installation</span>
+      </a>
+      <a class="intro__index-item" href="#prox">
+        <span class="intro__index-num">03</span>
+        <span class="intro__index-title">Proximity</span>
+        <span class="intro__index-type">Generative</span>
+      </a>
+      <a class="intro__index-item" href="#nails">
+        <span class="intro__index-num">04</span>
+        <span class="intro__index-title">Nails / Landlord</span>
+        <span class="intro__index-type">Art Piece</span>
+      </a>
+      <a class="intro__index-item" href="#inwards">
+        <span class="intro__index-num">05</span>
+        <span class="intro__index-title">Inwards</span>
+        <span class="intro__index-type">VJ Pack</span>
+      </a>
+      <a class="intro__index-item" href="#bette">
+        <span class="intro__index-num">06</span>
+        <span class="intro__index-title">bette2rave</span>
+        <span class="intro__index-type">VJ Set</span>
+      </a>
+      <a class="intro__index-item" href="#sets">
+        <span class="intro__index-num">07–10</span>
+        <span class="intro__index-title">Live Sets</span>
+        <span class="intro__index-type">VJ</span>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       01 — MESSICO E NUVOLE
+  ════════════════════════════════════ -->
+  <section class="section room" id="mene">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 01</span>
+      <span class="section__flag-title">Messico e Nuvole</span>
+    </div>
+    <span class="section__ghost" aria-hidden="true">01</span>
+    <div class="room__bg">
+      <video aria-hidden="true" muted loop playsinline preload="none" data-lazy poster="assets/komorebi/clouds.jpg">
+        <source src="assets/komorebi/clouds.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="room__content">
+      <div class="room__meta v4-fade">
+        <span>CH 01</span><span class="room__meta-sep">·</span>
+        <span>Installation</span><span class="room__meta-sep">·</span>
+        <span>4–6 September 2026</span>
+      </div>
+      <h2 class="room__title v4-fade">
+        <span class="glitch-wrap" data-text="Messico e Nuvole">Messico e Nuvole</span>
+      </h2>
+      <p class="room__subtitle v4-fade">la faccia triste dell&rsquo;America</p>
+      <p class="room__venue v4-fade">Alcova stage &nbsp;&middot;&nbsp; Komorebi Music Festival 2026<br>Forte di Vinadio &nbsp;&middot;&nbsp; Piedmont, IT</p>
+      <div class="room__desc v4-fade">
+        <p>Suspended in space, a constellation of inorganic elements waits to be inhabited. At first the sculpture appears compact and solid, yet light passes through it. The metal mesh becomes an iridescent membrane: where the light touches it, it glows like cloud; where it passes through, it lands on the stone arch as shadow, as rock.</p>
+        <p>Messico e Nuvole surprises and disorients, inviting the gaze to lose itself among matter, light and music. Lying down, visitors let the music carry them into a liquid, dilated journey, where the perception of time slowly fades and no ending is needed.</p>
+        <p>A site-specific installation created for the Alcova stage at Komorebi Music Festival 2026, at Forte di Vinadio. The fort is undergoing a transformation: its historical function is gradually giving way to new inhabitants, to a new community. The installation sits between the material and the immaterial, between memory and transformation. Here the architecture of the past meets music, light and contemporary vision, and for a few moments the visitor can lose the boundaries of the self.</p>
+      </div>
+    </div>
+
+    <div class="mene__grid mene__grid--3 v4-fade">
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/gongs.jpg">
+        <source src="assets/komorebi/gongs.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/wide.jpg">
+        <source src="assets/komorebi/wide.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/mesh.jpg">
+        <source src="assets/komorebi/mesh.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="mene__tall v4-fade">
+      <img src="assets/komorebi/clouds-dj.jpg" alt="Messico e Nuvole — Alcova stage, Komorebi Music Festival 2026" loading="lazy">
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/triptych.jpg">
+        <source src="assets/komorebi/triptych.mp4" type="video/mp4">
+      </video>
+      <img src="assets/komorebi/photo2.jpg" alt="Messico e Nuvole — Alcova stage, Komorebi Music Festival 2026" loading="lazy">
+    </div>
+
+    <div class="mene__grid mene__grid--4 v4-fade">
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/entrance.jpg">
+        <source src="assets/komorebi/entrance.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/crowd.jpg">
+        <source src="assets/komorebi/crowd.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/turntable.jpg">
+        <source src="assets/komorebi/turntable.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/laser.jpg">
+        <source src="assets/komorebi/laser.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="mene__grid mene__grid--2 v4-fade">
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/lines1.jpg">
+        <source src="assets/komorebi/lines1.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/komorebi/lines2.jpg">
+        <source src="assets/komorebi/lines2.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="inwards__below"></div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       02 — STATES OF MOTION
+  ════════════════════════════════════ -->
+  <section class="section" id="som">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 02</span>
+      <span class="section__flag-title">States of Motion</span>
+    </div>
+    <span class="section__ghost" aria-hidden="true">02</span>
+
+    <div class="section__header v4-fade">
+      <p class="section__meta">
+        <span>CH 02</span><span class="section__meta-sep">·</span>
+        <span>Installation</span><span class="section__meta-sep">·</span>
+        <span>30–31 May 2026</span>
+      </p>
+      <h2 class="section__title">
+        <span class="glitch-wrap" data-text="States of Motion">States of Motion</span>
+      </h2>
+      <p class="section__venue">
+        MART Museum of Modern and Contemporary Art &nbsp;&middot;&nbsp; Rovereto, IT<br>
+        Poplar-Utopia Festival &nbsp;&middot;&nbsp; With Consuelo Donati &amp; Luca Richelli
+      </p>
+      <div class="section__rule"></div>
+    </div>
+
+    <!-- Full-width hero photo -->
+    <div class="som__hero v4-fade">
+      <img src="assets/states-of-motion/hero.jpg" srcset="assets/states-of-motion/hero-sm.jpg 800w, assets/states-of-motion/hero.jpg 1600w" sizes="100vw" alt="States of Motion installation at MART Museum" loading="eager" fetchpriority="high">
+    </div>
+
+    <!-- Balla quote -->
+    <blockquote class="som__quote v4-fade">
+      <p>&ldquo;Rebuild it with the materials of your&nbsp;time.&rdquo;</p>
+      <cite>&mdash; Giacomo Balla, found by Elio Marchigiani under a cardboard flower</cite>
+    </blockquote>
+
+    <!-- 5-channel strip -->
+    <div class="som__channels">
+      <div class="som-ch">
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/states-of-motion_state1.jpg">
+          <source src="assets/states-of-motion/state1.mp4" type="video/mp4">
+        </video>
+        <div class="som-ch__overlay">
+          <span class="som-ch__roman">I</span>
+          <span class="som-ch__name">Accumulation</span>
+        </div>
+      </div>
+      <div class="som-ch">
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/states-of-motion_state2.jpg">
+          <source src="assets/states-of-motion/state2.mp4" type="video/mp4">
+        </video>
+        <div class="som-ch__overlay">
+          <span class="som-ch__roman">II</span>
+          <span class="som-ch__name">Duration</span>
+        </div>
+      </div>
+      <div class="som-ch">
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/states-of-motion_state3.jpg">
+          <source src="assets/states-of-motion/state3.mp4" type="video/mp4">
+        </video>
+        <div class="som-ch__overlay">
+          <span class="som-ch__roman">III</span>
+          <span class="som-ch__name">Degradation</span>
+        </div>
+      </div>
+      <div class="som-ch">
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/states-of-motion_state4.jpg">
+          <source src="assets/states-of-motion/state4.mp4" type="video/mp4">
+        </video>
+        <div class="som-ch__overlay">
+          <span class="som-ch__roman">IV</span>
+          <span class="som-ch__name">Contour</span>
+        </div>
+      </div>
+      <div class="som-ch">
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/states-of-motion_state5.jpg">
+          <source src="assets/states-of-motion/state5.mp4" type="video/mp4">
+        </video>
+        <div class="som-ch__overlay">
+          <span class="som-ch__roman">V</span>
+          <span class="som-ch__name">Presence</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- State descriptions — aligned under each channel -->
+    <div class="som__states v4-fade">
+      <div class="som-state">
+        <span class="som-state__machine">Warp Feedback Machine</span>
+        <p>The present is fed back into itself until the image no longer resembles what entered. Memory is not stored &mdash; it is metabolized.</p>
+      </div>
+      <div class="som-state">
+        <span class="som-state__machine">Slitscan / Time Displacement</span>
+        <p>Every position a body has occupied, held simultaneously. Past and present occupy the same surface.</p>
+      </div>
+      <div class="som-state">
+        <span class="som-state__machine">Optical Flow + Compression</span>
+        <p>Only the parts of the signal that move survive. The rest decays into blocks &mdash; data corruption as the truest portrait of flux.</p>
+      </div>
+      <div class="som-state">
+        <span class="som-state__machine">Edge Detection + Feedback Trails</span>
+        <p>The body reduced to the line where it ends and the world begins. That line accumulates, and persists after the body has moved on.</p>
+      </div>
+      <div class="som-state">
+        <span class="som-state__machine">Blob Composite + Time Machine</span>
+        <p>The same figure shown now and a few seconds ago, in the same frame. You are here, and you were here, and both are true at once.</p>
+      </div>
+    </div>
+
+    <!-- Description + photo grid -->
+    <div class="som__body">
+      <div class="som__desc v4-fade">
+        <p>In 1915, Giacomo Balla and Fortunato Depero published the <em>Futurist Reconstruction of the Universe</em>, calling for a new art: abstract and dynamic, transparent and luminous, autonomous, transformable, simultaneously plastic and alive.</p>
+        <p>States of Motion is a live audiovisual instrument that processes the present through feedback, temporal displacement, and signal degradation. A live camera enters the system and is acted upon immediately — accumulated, run back through itself, distributed across screens in space.</p>
+        <p>Your body is the input. The system does the rest.</p>
+        <p class="som__credit">Photo: @raw_sario / Rosario Multari — Poplar Utopia</p>
+      </div>
+      <div class="som__photos v4-fade">
+        <img src="assets/states-of-motion/01.jpg" srcset="assets/states-of-motion/01-sm.jpg 800w, assets/states-of-motion/01.jpg 1600w" sizes="(max-width: 700px) 90vw, (max-width: 1100px) 30vw, 24vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+        <img src="assets/states-of-motion/03.jpg" srcset="assets/states-of-motion/03-sm.jpg 800w, assets/states-of-motion/03.jpg 1600w" sizes="(max-width: 700px) 90vw, (max-width: 1100px) 30vw, 24vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+        <img src="assets/states-of-motion/p11.jpg" srcset="assets/states-of-motion/p11-sm.jpg 800w, assets/states-of-motion/p11.jpg 1600w" sizes="(max-width: 700px) 90vw, (max-width: 1100px) 30vw, 24vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+        <img src="assets/states-of-motion/04.jpg" srcset="assets/states-of-motion/04-sm.jpg 800w, assets/states-of-motion/04.jpg 1600w" sizes="(max-width: 700px) 90vw, (max-width: 1100px) 30vw, 24vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+        <img src="assets/states-of-motion/05.jpg" srcset="assets/states-of-motion/05-sm.jpg 800w, assets/states-of-motion/05.jpg 1600w" sizes="(max-width: 700px) 90vw, (max-width: 1100px) 30vw, 24vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+        <img src="assets/states-of-motion/06.jpg" srcset="assets/states-of-motion/06-sm.jpg 800w, assets/states-of-motion/06.jpg 1600w" sizes="(max-width: 700px) 90vw, (max-width: 1100px) 30vw, 24vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+      </div>
+    </div>
+
+    <!-- More photos -->
+    <div class="som__more v4-fade" style="margin-bottom:240px;">
+      <img src="assets/states-of-motion/p07.jpg" srcset="assets/states-of-motion/p07-sm.jpg 800w, assets/states-of-motion/p07.jpg 1600w" sizes="(max-width: 700px) 45vw, 22vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+      <img src="assets/states-of-motion/iphone01.jpg" srcset="assets/states-of-motion/iphone01-sm.jpg 800w, assets/states-of-motion/iphone01.jpg 1600w" sizes="(max-width: 700px) 45vw, 22vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+      <img src="assets/states-of-motion/iphone02.jpg" srcset="assets/states-of-motion/iphone02-sm.jpg 800w, assets/states-of-motion/iphone02.jpg 1600w" sizes="(max-width: 700px) 45vw, 22vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+      <img src="assets/states-of-motion/iphone03.jpg" srcset="assets/states-of-motion/iphone03-sm.jpg 800w, assets/states-of-motion/iphone03.jpg 1600w" sizes="(max-width: 700px) 45vw, 22vw" alt="States of Motion — installation view, MART Museum, Rovereto" loading="lazy">
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       03 — PROXIMITY
+  ════════════════════════════════════ -->
+  <section class="section room" id="prox">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 03</span>
+      <span class="section__flag-title">Proximity</span>
+    </div>
+    <span class="section__ghost" aria-hidden="true">03</span>
+    <div class="room__bg">
+      <video aria-hidden="true" muted loop playsinline preload="none" data-lazy poster="assets/posters/proximity_hero.jpg">
+        <source src="assets/proximity/hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="room__content">
+      <div class="room__meta v4-fade">
+        <span>CH 03</span><span class="room__meta-sep">·</span>
+        <span>Generative Piece</span><span class="room__meta-sep">·</span>
+        <span>2025</span>
+      </div>
+      <h2 class="room__title v4-fade">
+        <span class="glitch-wrap" data-text="Proximity">Proximity</span>
+      </h2>
+      <div class="room__desc v4-fade">
+        <p>My work explores how complex spatial structures can emerge from extremely simple primitives: points or agents and above all the connections between them. Rather than using surfaces or volumes, the visual language is built entirely from relationships: proximity, neighborhood, and their motion in space.</p>
+        <p>What interests me is not representing objects in space, but making relationships in space visible — showing how form can emerge purely from interaction, motion, and proximity.</p>
+      </div>
+    </div>
+
+    <!-- Three systems -->
+    <div class="prox__presets v4-fade">
+      <div class="prox-preset">
+        <span class="prox-preset__num">S/01</span>
+        <h3 class="prox-preset__title">Field</h3>
+        <p>Points sample a 3D texture field and are displaced by what they read. A feedback-slope-displace network introduces temporal memory &mdash; space shaped not only by the field, but by the history of the system.</p>
+      </div>
+      <div class="prox-preset">
+        <span class="prox-preset__num">S/02</span>
+        <h3 class="prox-preset__title">Swarm</h3>
+        <p>Flocking behaviors &mdash; alignment, cohesion, separation. The connections, not the particles, reveal the emergent collective structure: patterns of organization and self-regulation.</p>
+      </div>
+      <div class="prox-preset">
+        <span class="prox-preset__num">S/03</span>
+        <h3 class="prox-preset__title">Attractor</h3>
+        <p>Trajectories constrained by deterministic equations &mdash; chaotic but structured motion. The connected points expose the hidden geometry of the attractor over time.</p>
+      </div>
+    </div>
+    <div class="room__gap"></div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       04 — NAILS / LANDLORD
+  ════════════════════════════════════ -->
+  <section class="section room" id="nails">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 04</span>
+      <span class="section__flag-title">Nails / Landlord</span>
+    </div>
+    <span class="section__ghost" aria-hidden="true">04</span>
+    <div class="room__bg">
+      <video aria-hidden="true" muted loop playsinline preload="none" data-lazy poster="assets/posters/nails_v1.jpg">
+        <source src="assets/nails/v1.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="room__content">
+      <div class="room__meta v4-fade">
+        <span>CH 04</span><span class="room__meta-sep">·</span>
+        <span>Art Piece</span><span class="room__meta-sep">·</span>
+        <span>2025</span>
+      </div>
+      <h2 class="room__title v4-fade">
+        <span class="glitch-wrap" data-text="Nails / Landlord">Nails / Landlord</span>
+      </h2>
+      <p class="room__subtitle v4-fade"><em>Uecker nails to fix memory</em></p>
+    </div>
+
+    <!-- Studies II + III -->
+    <div class="nails__studies v4-fade">
+      <div class="nails-study">
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/nails_v2.jpg">
+          <source src="assets/nails/v2.mp4" type="video/mp4">
+        </video>
+        <span class="nails-study__label">Study II</span>
+      </div>
+      <div class="nails-study">
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/nails_v3.jpg">
+          <source src="assets/nails/v3.mp4" type="video/mp4">
+        </video>
+        <span class="nails-study__label">Study III</span>
+      </div>
+    </div>
+    <div class="room__gap"></div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       05 — INWARDS
+  ════════════════════════════════════ -->
+  <section class="section room" id="inwards">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 05</span>
+      <span class="section__flag-title">Inwards</span>
+    </div>
+    <span class="section__ghost" aria-hidden="true">05</span>
+    <div class="room__bg">
+      <video aria-hidden="true" muted loop playsinline preload="none" data-lazy poster="assets/posters/inwards_logo.jpg">
+        <source src="assets/inwards/logo.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="room__content">
+      <div class="room__meta v4-fade">
+        <span>CH 05</span><span class="room__meta-sep">·</span>
+        <span>VJ Pack</span><span class="room__meta-sep">·</span>
+        <span>March–April 2026</span>
+      </div>
+      <h2 class="room__title v4-fade">
+        <span class="glitch-wrap" data-text="Inwards">Inwards</span>
+      </h2>
+      <p class="room__venue v4-fade">For Inwards, composer based in UK</p>
+    </div>
+
+    <!-- 4-clip grid below the full-screen -->
+    <div class="inwards__grid v4-fade">
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/inwards_feedback_lines.jpg">
+        <source src="assets/inwards/feedback_lines.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/inwards_free_flow.jpg">
+        <source src="assets/inwards/free_flow.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/inwards_time_machine.jpg">
+        <source src="assets/inwards/time_machine.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/inwards_logo.jpg">
+        <source src="assets/inwards/logo.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="inwards__below"></div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       06 — BETTE2RAVE
+  ════════════════════════════════════ -->
+  <section class="section" id="bette">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 06</span>
+      <span class="section__flag-title">bette2rave</span>
+    </div>
+    <span class="section__ghost" aria-hidden="true">06</span>
+
+    <div class="section__header v4-fade">
+      <p class="section__meta">
+        <span>CH 06</span><span class="section__meta-sep">·</span>
+        <span>VJ Set</span><span class="section__meta-sep">·</span>
+        <span>25 April 2026 &nbsp;&middot;&nbsp; Paris</span>
+      </p>
+      <h2 class="section__title">
+        <span class="glitch-wrap" data-text="bette2rave">bette2rave</span>
+      </h2>
+    </div>
+
+    <div class="bette__hero v4-fade">
+      <img src="assets/bette/photos/DSCF8815.jpg" srcset="assets/bette/photos/DSCF8815-sm.jpg 800w, assets/bette/photos/DSCF8815.jpg 1600w" sizes="100vw" alt="bette2rave VJ set" loading="lazy">
+    </div>
+
+    <!-- Video row 1 — 3 landscape clips -->
+    <div class="bette__vid-row v4-fade">
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/bette_clip_5098.jpg">
+        <source src="assets/bette/clip_5098.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/bette_clip_5101.jpg">
+        <source src="assets/bette/clip_5101.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/bette_clip_5103.jpg">
+        <source src="assets/bette/clip_5103.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Photos strip -->
+    <div class="bette__strip v4-fade">
+      <img src="assets/bette/photos/DSCF8861.jpg" srcset="assets/bette/photos/DSCF8861-sm.jpg 800w, assets/bette/photos/DSCF8861.jpg 1600w" sizes="(max-width: 700px) 30vw, 12vw" alt="bette2rave VJ set — live visuals, Paris" loading="lazy">
+      <img src="assets/bette/photos/DSCF8904.jpg" srcset="assets/bette/photos/DSCF8904-sm.jpg 800w, assets/bette/photos/DSCF8904.jpg 1600w" sizes="(max-width: 700px) 30vw, 12vw" alt="bette2rave VJ set — live visuals, Paris" loading="lazy">
+      <img src="assets/bette/photos/DSCF8944.jpg" srcset="assets/bette/photos/DSCF8944-sm.jpg 800w, assets/bette/photos/DSCF8944.jpg 1600w" sizes="(max-width: 700px) 30vw, 12vw" alt="bette2rave VJ set — live visuals, Paris" loading="lazy">
+      <img src="assets/bette/photos/DSCF9037.jpg" srcset="assets/bette/photos/DSCF9037-sm.jpg 800w, assets/bette/photos/DSCF9037.jpg 1600w" sizes="(max-width: 700px) 30vw, 12vw" alt="bette2rave VJ set — live visuals, Paris" loading="lazy">
+      <img src="assets/bette/photos/DSCF9044.jpg" srcset="assets/bette/photos/DSCF9044-sm.jpg 800w, assets/bette/photos/DSCF9044.jpg 1600w" sizes="(max-width: 700px) 30vw, 12vw" alt="bette2rave VJ set — live visuals, Paris" loading="lazy">
+      <img src="assets/bette/photos/DSCF9084.jpg" srcset="assets/bette/photos/DSCF9084-sm.jpg 800w, assets/bette/photos/DSCF9084.jpg 1600w" sizes="(max-width: 700px) 30vw, 12vw" alt="bette2rave VJ set — live visuals, Paris" loading="lazy">
+      <img src="assets/bette/photos/DSCF9314.jpg" srcset="assets/bette/photos/DSCF9314-sm.jpg 800w, assets/bette/photos/DSCF9314.jpg 1600w" sizes="(max-width: 700px) 30vw, 12vw" alt="bette2rave VJ set — live visuals, Paris" loading="lazy">
+    </div>
+
+    <!-- Video row 2 — 4 landscape clips -->
+    <div class="bette__vid-row bette__vid-row--4 v4-fade">
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/bette_clip_5104.jpg">
+        <source src="assets/bette/clip_5104.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/bette_clip_5106.jpg">
+        <source src="assets/bette/clip_5106.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/bette_clip_5108.jpg">
+        <source src="assets/bette/clip_5108.mp4" type="video/mp4">
+      </video>
+      <video muted loop playsinline preload="none" data-lazy poster="assets/posters/bette_clip_5110.jpg">
+        <source src="assets/bette/clip_5110.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="bette__below"></div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       07–10 — LIVE SETS
+  ════════════════════════════════════ -->
+  <section class="section" id="sets">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 07–10</span>
+      <span class="section__flag-title">Setlist</span>
+    </div>
+    <span class="section__ghost" aria-hidden="true">07</span>
+
+    <div class="section__header v4-fade">
+      <p class="section__meta">
+        <span>CH 07 — 10</span><span class="section__meta-sep">·</span>
+        <span>Live VJ Sets</span>
+      </p>
+      <h2 class="section__title">
+        <span class="glitch-wrap" data-text="Setlist">Setlist</span>
+      </h2>
+      <div class="section__rule"></div>
+    </div>
+
+    <div class="setlist__grid">
+      <div class="setlist__item v4-fade" id="poplar">
+        <video class="setlist__alt" muted loop playsinline preload="none" data-alt-src="assets/poplar/clip2.mp4" aria-hidden="true"></video>
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/poplar_hero.jpg">
+          <source src="assets/poplar/hero.mp4" type="video/mp4">
+        </video>
+        <div class="setlist__info">
+          <p class="setlist__ch">CH 07</p>
+          <h3 class="setlist__title">
+            <span class="glitch-wrap" data-text="Poplar Festival">Poplar Festival</span>
+          </h3>
+          <p class="setlist__date">12–13 Sep 2025 &nbsp;&middot;&nbsp; Trento, IT</p>
+        </div>
+      </div>
+
+      <div class="setlist__item v4-fade" id="osfn">
+        <video class="setlist__alt" muted loop playsinline preload="none" data-alt-src="assets/osfn/clip1.mp4" aria-hidden="true"></video>
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/osfn_liquid_glass.jpg">
+          <source src="assets/osfn/liquid_glass.mp4" type="video/mp4">
+        </video>
+        <div class="setlist__info">
+          <p class="setlist__ch">CH 08</p>
+          <h3 class="setlist__title">
+            <span class="glitch-wrap" data-text="One Size Fits None">One Size Fits None</span>
+          </h3>
+          <p class="setlist__date">22 Jun 2025 &nbsp;&middot;&nbsp; Trento, IT</p>
+        </div>
+      </div>
+
+      <div class="setlist__item v4-fade" id="pig">
+        <video class="setlist__alt" muted loop playsinline preload="none" data-alt-src="assets/pig/clip2.mp4" aria-hidden="true"></video>
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/pig_clip1.jpg">
+          <source src="assets/pig/clip1.mp4" type="video/mp4">
+        </video>
+        <div class="setlist__info">
+          <p class="setlist__ch">CH 09</p>
+          <h3 class="setlist__title">
+            <span class="glitch-wrap" data-text="Follow the Pig">Follow the Pig</span>
+          </h3>
+          <p class="setlist__date">12 Jul 2025 &nbsp;&middot;&nbsp; Trento, IT</p>
+        </div>
+      </div>
+
+      <div class="setlist__item v4-fade" id="mesiano">
+        <video class="setlist__alt" muted loop playsinline preload="none" data-alt-src="assets/mesiano/clip2.mp4" aria-hidden="true"></video>
+        <video muted loop playsinline preload="none" data-lazy poster="assets/posters/mesiano_clip1.jpg">
+          <source src="assets/mesiano/clip1.mp4" type="video/mp4">
+        </video>
+        <div class="setlist__info">
+          <p class="setlist__ch">CH 10</p>
+          <h3 class="setlist__title">
+            <span class="glitch-wrap" data-text="Mesiano 2025">Mesiano 2025</span>
+          </h3>
+          <p class="setlist__date">10 May 2025 &nbsp;&middot;&nbsp; FEELTHEF, Trento, IT</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       TRANSMISSION LOG
+  ════════════════════════════════════ -->
+  <section class="section" id="log">
+    <div class="section__flag">
+      <span class="section__flag-ch">SIGNAL</span>
+      <span class="section__flag-title">Transmission Log</span>
+    </div>
+
+    <div class="log">
+      <div class="log__head v4-fade">
+        <span class="log__tag">// Transmission Log</span>
+        <h2 class="log__title-main">Selected appearances<br>2025&ndash;2026</h2>
+      </div>
+
+      <ol class="log__list v4-fade">
+        <li class="log__row">
+          <span class="log__date">4&ndash;6 Sep 2026</span>
+          <a class="log__name" href="#mene">Messico e Nuvole</a>
+          <span class="log__venue">Komorebi Music Festival, Forte di Vinadio &middot; IT</span>
+          <span class="log__type">Installation</span>
+        </li>
+        <li class="log__row">
+          <span class="log__date">30&ndash;31 May 2026</span>
+          <a class="log__name" href="#som">States of Motion</a>
+          <span class="log__venue">MART Museum, Poplar-Utopia &middot; Rovereto, IT</span>
+          <span class="log__type">Installation</span>
+        </li>
+        <li class="log__row">
+          <span class="log__date">25 Apr 2026</span>
+          <a class="log__name" href="#bette">bette2rave</a>
+          <span class="log__venue">Paris, FR</span>
+          <span class="log__type">VJ Set</span>
+        </li>
+        <li class="log__row">
+          <span class="log__date">Mar&ndash;Apr 2026</span>
+          <a class="log__name" href="#inwards">Inwards</a>
+          <span class="log__venue">For Inwards (UK)</span>
+          <span class="log__type">VJ Pack</span>
+        </li>
+        <li class="log__row">
+          <span class="log__date">12&ndash;13 Sep 2025</span>
+          <a class="log__name" href="#sets">Poplar Festival</a>
+          <span class="log__venue">Trento, IT</span>
+          <span class="log__type">VJ Set</span>
+        </li>
+        <li class="log__row">
+          <span class="log__date">12 Jul 2025</span>
+          <a class="log__name" href="#sets">Follow the Pig</a>
+          <span class="log__venue">Trento, IT</span>
+          <span class="log__type">VJ Set</span>
+        </li>
+        <li class="log__row">
+          <span class="log__date">22 Jun 2025</span>
+          <a class="log__name" href="#sets">One Size Fits None</a>
+          <span class="log__venue">Trento, IT</span>
+          <span class="log__type">VJ Set</span>
+        </li>
+        <li class="log__row">
+          <span class="log__date">10 May 2025</span>
+          <a class="log__name" href="#sets">Mesiano &middot; FEELTHEF</a>
+          <span class="log__venue">Trento, IT</span>
+          <span class="log__type">VJ Set</span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════
+       ABOUT + CONTACT
+  ════════════════════════════════════ -->
+  <section class="section" id="about">
+    <div class="section__flag">
+      <span class="section__flag-ch">CH 08</span>
+      <span class="section__flag-title">About</span>
+    </div>
+    <div class="about">
+      <div class="about__portrait v4-fade">
+        <img src="assets/about_portrait.jpg" alt="Matteo Scandola at the decks" loading="lazy">
+      </div>
+      <div class="v4-fade">
+        <span class="about__tag">// About</span>
+        <h3 class="about__name">Matteo Scandola<br><em>m.code</em></h3>
+        <div class="about__bio">
+          <p>Matteo Scandola aka m.code (Verona, 1998) is a visual artist and researcher based in Paris, exploring emergence, feedback, and spatial relationships through real-time audiovisual systems.</p>
+          <p>With a background in physics, he later shifted his focus toward audiovisual art through the discovery of TouchDesigner. His work investigates how structure and complexity can emerge from interaction, motion, and accumulation through experiments with code and algorithms.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact">
+      <span class="contact__tag">// Contact</span>
+      <a href="mailto:m.scandola1998@gmail.com" class="contact__email" id="contact-email">
+        m.scandola1998@gmail.com
+      </a>
+      <span class="contact__hint" id="email-hint" aria-live="polite">// click to copy</span>
+      <div class="contact__social">
+        <a href="https://www.instagram.com/_m.code_/" class="contact__social-link" target="_blank" rel="noopener noreferrer">
+          <span class="contact__social-platform">Instagram</span>
+          <span class="contact__social-handle">_m.code_</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <span>m.code — Matteo Scandola</span>
+    <a href="https://www.instagram.com/_m.code_/" class="footer__link" target="_blank" rel="noopener noreferrer">@_m.code_</a>
+    <span>2025–2026</span>
+  </footer>
+
+  <script src="v4.js?v=10"></script>
+</body>
 </html>
