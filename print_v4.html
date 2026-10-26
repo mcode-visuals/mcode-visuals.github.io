@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
   <title>m.code — Portfolio 2025–2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
   <style>
+    /* White print edition.
+       Safari's PDF export turns CSS gradients with transparency (overlays,
+       scan lines) into solid black blocks, so this layout uses no gradients:
+       captions sit on the white page, never on top of photos. */
     @page { size: A4 portrait; margin: 0; }
 
     *, *::before, *::after {
@@ -14,13 +19,13 @@
     }
 
     :root {
-      --bg:     #080807;
-      --text:   #f0efe9;
-      --muted:  #56534a;
-      --dim:    rgba(240,239,233,0.72);
-      --accent: #00e5ff;
-      --red:    #ff2d55;
-      --border: rgba(240,239,233,0.08);
+      --bg:     #ffffff;
+      --text:   #111110;
+      --muted:  #8b8a84;
+      --dim:    #3f3e3a;
+      --accent: #0086a0;
+      --red:    #e0203f;
+      --border: rgba(17,17,16,0.14);
       --serif:  'Cormorant Garamond', Georgia, serif;
       --sans:   'Inter', system-ui, sans-serif;
       --mono:   'SF Mono', 'Fira Code', 'Consolas', monospace;
@@ -37,52 +42,54 @@
 
     .pg {
       width: 210mm;
-      height: 297mm;
+      height: 296mm;
       overflow: hidden;
       position: relative;
       page-break-after: always;
       break-after: page;
       background: var(--bg);
+      padding: 14mm 16mm;
+      display: flex; flex-direction: column;
     }
     .pg:last-child { page-break-after: auto; break-after: auto; }
+    .pg--bleed { padding: 0; }
 
-    /* scan lines */
-    .pg::after {
-      content: '';
-      position: absolute; inset: 0; z-index: 99; pointer-events: none;
-      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 3px);
-    }
+    /* images that fill a sized box (absolute: reliable in Safari print) */
+    .fig { position: relative; overflow: hidden; background: #e9e8e3; }
+    .fig > img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 
     .mono {
       font-family: var(--mono); font-size: 6pt;
       letter-spacing: 0.1em; color: var(--muted);
     }
-
     .ch-label {
       font-family: var(--mono); font-size: 5.5pt;
       letter-spacing: 0.18em; color: var(--accent); text-transform: uppercase;
     }
-
     .project-title {
       font-family: var(--serif); font-weight: 300;
-      letter-spacing: -0.02em; line-height: 0.88;
+      letter-spacing: -0.02em; line-height: 0.88; color: var(--text);
     }
-
     .desc { font-size: 7.5pt; line-height: 1.9; color: var(--dim); }
     .desc p { margin-bottom: 6pt; }
     .desc p:last-child { margin-bottom: 0; }
 
-    /* Static glitch — double offset shadow.
-       nowrap: the duplicates are offset a few px, so without it they
-       re-wrap inside the tight inline-block and print a stray last word. */
+    .head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding-bottom: 8pt; border-bottom: 0.4pt solid var(--border);
+    }
+    .head__meta { text-align: right; }
+    .head__meta .mono + .mono { margin-top: 2pt; }
+
+    /* Static glitch — offset colour shadows (no gradients). */
     .glitch { position: relative; display: inline-block; white-space: nowrap; }
     .glitch::before {
       content: attr(data-text); position: absolute; white-space: nowrap;
-      left: 3px; top: 1px; color: var(--accent); opacity: 0.35; pointer-events: none;
+      left: 2.5px; top: 1px; color: var(--accent); opacity: 0.28; pointer-events: none;
     }
     .glitch::after {
       content: attr(data-text); position: absolute; white-space: nowrap;
-      left: -2px; top: -1px; color: var(--red); opacity: 0.28; pointer-events: none;
+      left: -2px; top: -1px; color: var(--red); opacity: 0.22; pointer-events: none;
     }
 
     .rec {
@@ -91,30 +98,29 @@
     }
     .rec-dot { width: 5pt; height: 5pt; border-radius: 50%; background: var(--red); flex-shrink: 0; }
 
-    /* Channel cell */
-    .som-ch { position: relative; overflow: hidden; aspect-ratio: 10/16; }
-    .som-ch img { width: 100%; height: 100%; object-fit: cover; }
-    .som-ch__overlay {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 4pt 5pt;
-      background: linear-gradient(to top, rgba(8,8,7,0.88) 0%, transparent 70%);
-    }
-    .som-ch__roman {
-      font-family: var(--serif); font-size: 13pt; font-weight: 300;
-      color: var(--accent); line-height: 1;
-    }
-    .som-ch__name {
-      font-family: var(--mono); font-size: 4.5pt; letter-spacing: 0.14em;
-      color: var(--text); text-transform: uppercase; margin-top: 2pt;
+    /* Cover wall */
+    .vwall { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3pt 2pt; }
+    .vwall-cell .fig { aspect-ratio: 16/10; }
+    .vwall-cell__num {
+      display: block; margin-top: 2pt;
+      font-family: var(--mono); font-size: 4.5pt; color: var(--accent); letter-spacing: 0.16em;
     }
 
-    /* State description columns */
-    .som-state { padding-top: 5pt; border-top: 0.4pt solid var(--border); }
+    /* Stage tiles (square) */
+    .som-ch .fig { aspect-ratio: 1 / 1; }
+    .som-ch__label {
+      display: flex; align-items: baseline; gap: 5pt; margin-top: 4pt;
+    }
+    .som-ch__roman { font-family: var(--serif); font-size: 15pt; font-weight: 300; color: var(--accent); line-height: 1; }
+    .som-ch__name {
+      font-family: var(--mono); font-size: 4.5pt; letter-spacing: 0.14em;
+      color: var(--text); text-transform: uppercase;
+    }
+    .som-state { padding-top: 5pt; border-top: 0.4pt solid var(--border); margin-top: 3pt; }
     .som-state__machine {
       display: block; font-family: var(--mono); font-size: 4.2pt;
       letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--accent); opacity: 0.7; margin-bottom: 4pt;
+      color: var(--accent); margin-bottom: 4pt;
     }
     .som-state p { font-size: 5.8pt; line-height: 1.8; color: var(--dim); }
 
@@ -130,43 +136,27 @@
     .preset p { font-size: 6.5pt; line-height: 1.9; color: var(--dim); }
 
     /* Setlist cell */
-    .set-cell { position: relative; overflow: hidden; }
-    .set-cell img { width: 100%; height: 100%; object-fit: cover; }
-    .set-cell__overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(8,8,7,0.96) 0%, rgba(8,8,7,0.2) 55%, transparent 100%);
-    }
-    .set-cell__info { position: absolute; bottom: 6mm; left: 7mm; right: 7mm; }
+    .set-cell { display: flex; flex-direction: column; min-height: 0; }
+    .set-cell .fig { flex: 1; }
+    .set-cell__info { padding-top: 5pt; }
     .set-cell__ch {
       font-family: var(--mono); font-size: 5.5pt; color: var(--accent);
       letter-spacing: 0.18em; margin-bottom: 3pt;
     }
     .set-cell__title {
-      font-family: var(--serif); font-size: 20pt; font-weight: 300;
-      letter-spacing: -0.02em; line-height: 0.9;
+      font-family: var(--serif); font-size: 18pt; font-weight: 300;
+      letter-spacing: -0.02em; line-height: 0.95; color: var(--text);
     }
     .set-cell__date {
       font-family: var(--mono); font-size: 5pt; color: var(--muted);
       letter-spacing: 0.12em; margin-top: 3pt;
-    }
-
-    /* Cover wall */
-    .vwall {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 1fr); gap: 2pt;
-    }
-    .vwall-cell { position: relative; overflow: hidden; aspect-ratio: 16/9; background: #111; }
-    .vwall-cell img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
-    .vwall-cell__num {
-      position: absolute; top: 3pt; left: 4pt;
-      font-family: var(--mono); font-size: 4.5pt; color: var(--accent); letter-spacing: 0.16em;
     }
   </style>
 </head>
 <body>
 
   <!-- ════ PAGE 1: COVER ════ -->
-  <div class="pg" style="display:flex;flex-direction:column;justify-content:space-between;padding:16mm 20mm;">
+  <div class="pg" style="justify-content:space-between;padding:16mm 20mm;">
     <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8pt;border-bottom:0.4pt solid var(--border);">
       <span class="mono">SIGNAL &mdash; PORTFOLIO DOCUMENT</span>
       <div class="rec"><div class="rec-dot"></div>PRINT</div>
@@ -175,20 +165,22 @@
     <div style="text-align:center;">
       <h1 class="project-title glitch" data-text="m.code" style="font-size:102pt;">m.code</h1>
       <p style="margin-top:8mm;font-family:var(--mono);font-size:6pt;letter-spacing:0.2em;color:var(--muted);">AKA MATTEO SCANDOLA &nbsp;&nbsp;&mdash;&nbsp;&nbsp; VISUAL ARTIST · RESEARCHER · VJ</p>
-      <p style="margin-top:3pt;font-family:var(--mono);font-size:5.5pt;letter-spacing:0.14em;color:var(--muted);opacity:0.5;">VERONA &mdash; PARIS &nbsp;&middot;&nbsp; 2025–2026</p>
+      <p style="margin-top:3pt;font-family:var(--mono);font-size:5.5pt;letter-spacing:0.14em;color:var(--muted);">VERONA &mdash; PARIS &nbsp;&middot;&nbsp; 2025–2026</p>
     </div>
 
     <div>
-      <p class="mono" style="margin-bottom:5pt;color:var(--accent);letter-spacing:0.18em;">SIGNAL MATRIX // CH 01 &mdash; 09</p>
+      <p class="mono" style="margin-bottom:5pt;color:var(--accent);letter-spacing:0.18em;">SIGNAL MATRIX // CH 01 &mdash; 10</p>
       <div class="vwall">
-        <div class="vwall-cell"><img src="assets/print/dl/states-of-motion_hero.jpg"><span class="vwall-cell__num">CH 01</span></div>
-        <div class="vwall-cell"><img src="assets/print/prox.jpg"><span class="vwall-cell__num">CH 02</span></div>
-        <div class="vwall-cell"><img src="assets/print/nails_II.jpg"><span class="vwall-cell__num">CH 03</span></div>
-        <div class="vwall-cell"><img src="assets/print/dl/inwards_snap1.jpg"><span class="vwall-cell__num">CH 04</span></div>
-        <div class="vwall-cell"><img src="assets/print/dl/bette_photos_DSCF8815.jpg"><span class="vwall-cell__num">CH 05</span></div>
-        <div class="vwall-cell"><img src="assets/print/dl/poplar_snap.jpg"><span class="vwall-cell__num">CH 06</span></div>
-        <div class="vwall-cell"><img src="assets/print/dl/pig_snap.jpg"><span class="vwall-cell__num">CH 08</span></div>
-        <div class="vwall-cell"><img src="assets/print/dl/mesiano_snap.jpg"><span class="vwall-cell__num">CH 09</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/mene_hero.jpg"></div><span class="vwall-cell__num">CH 01</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/dl/states-of-motion_hero.jpg"></div><span class="vwall-cell__num">CH 02</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/prox.jpg"></div><span class="vwall-cell__num">CH 03</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/nails_II.jpg"></div><span class="vwall-cell__num">CH 04</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/dl/inwards_snap1.jpg"></div><span class="vwall-cell__num">CH 05</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/dl/bette_photos_DSCF8815.jpg"></div><span class="vwall-cell__num">CH 06</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/dl/poplar_snap.jpg"></div><span class="vwall-cell__num">CH 07</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/dl/osfn_snap.jpg"></div><span class="vwall-cell__num">CH 08</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/dl/pig_snap.jpg"></div><span class="vwall-cell__num">CH 09</span></div>
+        <div class="vwall-cell"><div class="fig"><img src="assets/print/dl/mesiano_snap.jpg"></div><span class="vwall-cell__num">CH 10</span></div>
       </div>
     </div>
 
@@ -200,52 +192,88 @@
   </div>
 
 
-  <!-- ════ PAGE 2: STATES OF MOTION ════ -->
-  <div class="pg" style="display:flex;flex-direction:column;padding:14mm 16mm;">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:8pt;border-bottom:0.4pt solid var(--border);">
+  <!-- ════ PAGE 2: MESSICO E NUVOLE ════ -->
+  <div class="pg">
+    <div class="head">
       <div>
         <p class="ch-label" style="margin-bottom:4pt;">CH 01 &nbsp;// INSTALLATION</p>
-        <h2 class="project-title glitch" data-text="States of Motion" style="font-size:38pt;">States of Motion</h2>
+        <h2 class="project-title glitch" data-text="Messico e Nuvole" style="font-size:38pt;">Messico e Nuvole</h2>
+        <p style="margin-top:5pt;font-family:var(--serif);font-style:italic;font-size:11pt;color:var(--dim);">la faccia triste dell&rsquo;America</p>
       </div>
-      <div style="text-align:right;">
-        <p class="mono" style="color:var(--accent);">MART MUSEUM</p>
-        <p class="mono" style="margin-top:2pt;">30–31 MAY 2026 · ROVERETO IT</p>
-        <p class="mono" style="margin-top:2pt;">POPLAR-UTOPIA FESTIVAL</p>
+      <div class="head__meta">
+        <p class="mono" style="color:var(--accent);">ALCOVA STAGE &middot; KOMOREBI 2026</p>
+        <p class="mono">4&ndash;6 SEPTEMBER 2026</p>
+        <p class="mono">FORTE DI VINADIO &middot; IT</p>
       </div>
     </div>
 
-    <!-- Balla quote -->
+    <div style="display:grid;grid-template-columns:1fr 78mm;gap:2pt;margin-top:7mm;height:138mm;">
+      <div class="fig"><img src="assets/print/mene_hero.jpg" style="object-position:center 35%;"></div>
+      <div style="display:grid;grid-template-rows:repeat(3,1fr);gap:2pt;">
+        <div class="fig"><img src="assets/print/mene_gongs.jpg"></div>
+        <div class="fig"><img src="assets/print/mene_wide.jpg"></div>
+        <div class="fig"><img src="assets/print/mene_mesh.jpg"></div>
+      </div>
+    </div>
+
+    <div class="desc" style="column-count:2;column-gap:8mm;margin-top:7mm;">
+      <p>Suspended in space, a constellation of inorganic elements waits to be inhabited. At first the sculpture appears compact and solid, yet light passes through it. The metal mesh becomes an iridescent membrane: where the light touches it, it glows like cloud; where it passes through, it lands on the stone arch as shadow, as rock.</p>
+      <p>Messico e Nuvole surprises and disorients, inviting the gaze to lose itself among matter, light and music. Lying down, visitors let the music carry them into a liquid, dilated journey, where the perception of time slowly fades and no ending is needed.</p>
+      <p>A site-specific installation created for the Alcova stage at Komorebi Music Festival 2026, at Forte di Vinadio. The fort is undergoing a transformation: its historical function is gradually giving way to new inhabitants, to a new community. The installation sits between the material and the immaterial, between memory and transformation.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2pt;margin-top:auto;">
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/mene_lines2.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/mene_crowd.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/mene_entrance.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/mene_laser.jpg"></div>
+    </div>
+  </div>
+
+
+  <!-- ════ PAGE 3: STATES OF MOTION ════ -->
+  <div class="pg">
+    <div class="head">
+      <div>
+        <p class="ch-label" style="margin-bottom:4pt;">CH 02 &nbsp;// INSTALLATION</p>
+        <h2 class="project-title glitch" data-text="States of Motion" style="font-size:38pt;">States of Motion</h2>
+      </div>
+      <div class="head__meta">
+        <p class="mono" style="color:var(--accent);">MART MUSEUM</p>
+        <p class="mono">30–31 MAY 2026 · ROVERETO IT</p>
+        <p class="mono">POPLAR-UTOPIA FESTIVAL</p>
+      </div>
+    </div>
+
     <div style="text-align:center;padding:9mm 10mm 8mm;">
       <p style="font-family:var(--serif);font-style:italic;font-weight:300;font-size:17pt;letter-spacing:-0.01em;line-height:1.25;">&ldquo;Rebuild it with the materials of your&nbsp;time.&rdquo;</p>
       <p class="mono" style="margin-top:4mm;letter-spacing:0.2em;text-transform:uppercase;">&mdash; Giacomo Balla, found by Elio Marchigiani under a cardboard flower</p>
     </div>
 
-    <!-- 5 channels -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2pt;">
       <div class="som-ch">
-        <img src="assets/print/som_I.jpg">
-        <div class="som-ch__overlay"><span class="som-ch__roman">I</span><span class="som-ch__name">Accumulation</span></div>
+        <div class="fig"><img src="assets/print/som_s1.jpg"></div>
+        <div class="som-ch__label"><span class="som-ch__roman">I</span><span class="som-ch__name">Accumulation</span></div>
       </div>
       <div class="som-ch">
-        <img src="assets/print/som_II.jpg">
-        <div class="som-ch__overlay"><span class="som-ch__roman">II</span><span class="som-ch__name">Duration</span></div>
+        <div class="fig"><img src="assets/print/som_s2.jpg"></div>
+        <div class="som-ch__label"><span class="som-ch__roman">II</span><span class="som-ch__name">Duration</span></div>
       </div>
       <div class="som-ch">
-        <img src="assets/print/som_III.jpg">
-        <div class="som-ch__overlay"><span class="som-ch__roman">III</span><span class="som-ch__name">Degradation</span></div>
+        <div class="fig"><img src="assets/print/som_s3.jpg"></div>
+        <div class="som-ch__label"><span class="som-ch__roman">III</span><span class="som-ch__name">Degradation</span></div>
       </div>
       <div class="som-ch">
-        <img src="assets/print/som_IV.jpg">
-        <div class="som-ch__overlay"><span class="som-ch__roman">IV</span><span class="som-ch__name">Contour</span></div>
+        <div class="fig"><img src="assets/print/som_s4.jpg"></div>
+        <div class="som-ch__label"><span class="som-ch__roman">IV</span><span class="som-ch__name">Contour</span></div>
       </div>
       <div class="som-ch">
-        <img src="assets/print/som_V.jpg">
-        <div class="som-ch__overlay"><span class="som-ch__roman">V</span><span class="som-ch__name">Presence</span></div>
+        <div class="fig"><img src="assets/print/som_s5.jpg"></div>
+        <div class="som-ch__label"><span class="som-ch__roman">V</span><span class="som-ch__name">Presence</span></div>
       </div>
     </div>
 
-    <!-- State descriptions -->
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2pt;margin-top:3pt;">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2pt;">
       <div class="som-state">
         <span class="som-state__machine">Warp Feedback Machine</span>
         <p>The present is fed back into itself until the image no longer resembles what entered. Memory is not stored &mdash; it is metabolized.</p>
@@ -268,57 +296,43 @@
       </div>
     </div>
 
-    <!-- Description + photos -->
-    <div style="display:grid;grid-template-columns:58mm 1fr;gap:8mm;flex:1;margin-top:7mm;align-items:start;">
+    <div style="display:grid;grid-template-columns:58mm 1fr;gap:8mm;margin-top:7mm;align-items:start;">
       <div class="desc">
         <p>A live audiovisual instrument that processes the present through feedback, temporal displacement, and signal degradation. A live camera enters the system and is acted upon immediately &mdash; accumulated, run back through itself, distributed across screens in space.</p>
         <p>Your body is the input. The system does the rest.</p>
         <p style="margin-top:8pt;"><span style="font-family:var(--mono);font-size:5.5pt;color:var(--muted);">With Consuelo Donati &amp; Luca Richelli<br>Photo: @raw_sario / Rosario Multari</span></p>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:2pt;align-content:start;">
-        <img src="assets/print/dl/states-of-motion_01.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        <img src="assets/print/dl/states-of-motion_p08.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        <img src="assets/print/dl/states-of-motion_04.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        <img src="assets/print/dl/states-of-motion_05.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
+        <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/states-of-motion_01.jpg"></div>
+        <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/states-of-motion_04.jpg"></div>
+        <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/states-of-motion_05.jpg"></div>
+        <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/states-of-motion_06.jpg"></div>
       </div>
     </div>
   </div>
 
 
-  <!-- ════ PAGE 3: SOM PHOTO WALL ════ -->
-  <div class="pg" style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:2pt;">
-    <img src="assets/print/dl/states-of-motion_p07.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_p09.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_06.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_iphone01.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_p10.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_iphone02.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_setup01.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_p11.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_iphone03.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_setup02.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_iphone04.jpg" style="width:100%;height:100%;object-fit:cover;">
-    <img src="assets/print/dl/states-of-motion_setup03.jpg" style="width:100%;height:100%;object-fit:cover;">
+  <!-- ════ PAGE 4: SOM PHOTO WALL ════ -->
+  <div class="pg pg--bleed" style="display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(3,1fr);gap:2pt;">
+    <div class="fig"><img src="assets/print/dl/states-of-motion_p07.jpg"></div>
+    <div class="fig"><img src="assets/print/dl/states-of-motion_03.jpg"></div>
+    <div class="fig"><img src="assets/print/dl/states-of-motion_p11.jpg"></div>
+    <div class="fig"><img src="assets/print/dl/states-of-motion_iphone01.jpg"></div>
+    <div class="fig"><img src="assets/print/dl/states-of-motion_iphone02.jpg"></div>
+    <div class="fig"><img src="assets/print/dl/states-of-motion_iphone03.jpg"></div>
   </div>
 
 
-  <!-- ════ PAGE 4: PROXIMITY ════ -->
-  <div class="pg" style="display:flex;flex-direction:column;">
-    <div style="position:relative;overflow:hidden;flex:1;">
-      <img src="assets/print/dl/proximity_snap.jpg" style="width:100%;height:100%;object-fit:cover;opacity:0.9;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,7,0.97) 0%,rgba(8,8,7,0.3) 55%,transparent 100%);"></div>
-      <div style="position:absolute;top:5mm;left:6mm;">
-        <p class="ch-label">CH 02 &mdash; PROXIMITY</p>
-      </div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:8mm;">
-        <h2 class="project-title glitch" data-text="Proximity" style="font-size:34pt;">Proximity</h2>
-        <p class="mono" style="margin-top:4pt;">GENERATIVE PIECE · 2025</p>
-        <p class="desc" style="margin-top:6pt;max-width:130mm;">Complex spatial structures emerging from extremely simple primitives: points, agents, and the connections between them. The visual language is built entirely from relationships &mdash; proximity, neighborhood, and their motion in space. Not representing objects in space, but making relationships in space visible.</p>
-      </div>
+  <!-- ════ PAGE 5: PROXIMITY ════ -->
+  <div class="pg pg--bleed">
+    <div class="fig" style="flex:1;"><img src="assets/print/dl/proximity_snap.jpg"></div>
+    <div style="padding:9mm 16mm 0;">
+      <p class="ch-label" style="margin-bottom:4pt;">CH 03 &mdash; PROXIMITY</p>
+      <h2 class="project-title glitch" data-text="Proximity" style="font-size:34pt;">Proximity</h2>
+      <p class="mono" style="margin-top:4pt;">GENERATIVE PIECE · 2025</p>
+      <p class="desc" style="margin-top:6pt;max-width:140mm;">Complex spatial structures emerging from extremely simple primitives: points, agents, and the connections between them. The visual language is built entirely from relationships &mdash; proximity, neighborhood, and their motion in space. Not representing objects in space, but making relationships in space visible.</p>
     </div>
-
-    <!-- Three systems -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;padding:10mm 16mm 12mm;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;padding:8mm 16mm 12mm;">
       <div class="preset">
         <span class="preset__num">S/01</span>
         <h3 class="preset__title">Field</h3>
@@ -338,118 +352,107 @@
   </div>
 
 
-  <!-- ════ PAGE 5: NAILS / LANDLORD ════ -->
-  <div class="pg" style="display:flex;flex-direction:column;gap:2pt;">
-    <div style="position:relative;overflow:hidden;flex:1.4;">
-      <img src="assets/print/dl/nails_snap.jpg" style="width:100%;height:100%;object-fit:cover;opacity:0.9;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,7,0.97) 0%,rgba(8,8,7,0.3) 55%,transparent 100%);"></div>
-      <div style="position:absolute;top:5mm;left:6mm;">
-        <p class="ch-label">CH 03 &mdash; NAILS / LANDLORD</p>
-      </div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:8mm;">
-        <h2 class="project-title glitch" data-text="Nails / Landlord" style="font-size:34pt;">Nails / Landlord</h2>
-        <p style="margin-top:5pt;font-family:var(--serif);font-style:italic;font-size:11pt;color:var(--dim);">Uecker nails to fix memory</p>
-        <p class="mono" style="margin-top:4pt;">ART PIECE · 2025</p>
-      </div>
+  <!-- ════ PAGE 6: NAILS / LANDLORD ════ -->
+  <div class="pg pg--bleed">
+    <div class="fig" style="flex:1.5;"><img src="assets/print/dl/nails_snap.jpg"></div>
+    <div style="padding:8mm 16mm 7mm;">
+      <p class="ch-label" style="margin-bottom:4pt;">CH 04 &mdash; NAILS / LANDLORD</p>
+      <h2 class="project-title glitch" data-text="Nails / Landlord" style="font-size:34pt;">Nails / Landlord</h2>
+      <p style="margin-top:5pt;font-family:var(--serif);font-style:italic;font-size:11pt;color:var(--dim);">Uecker nails to fix memory</p>
+      <p class="mono" style="margin-top:4pt;">ART PIECE · 2025</p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:2pt;flex:1;">
-      <div style="position:relative;overflow:hidden;">
-        <img src="assets/print/nails_II.jpg" style="width:100%;height:100%;object-fit:cover;">
-        <span style="position:absolute;left:5mm;bottom:4mm;font-family:var(--mono);font-size:5pt;letter-spacing:0.2em;color:rgba(240,239,233,0.6);text-transform:uppercase;">STUDY II</span>
-      </div>
-      <div style="position:relative;overflow:hidden;">
-        <img src="assets/print/nails_III.jpg" style="width:100%;height:100%;object-fit:cover;">
-        <span style="position:absolute;left:5mm;bottom:4mm;font-family:var(--mono);font-size:5pt;letter-spacing:0.2em;color:rgba(240,239,233,0.6);text-transform:uppercase;">STUDY III</span>
-      </div>
+      <div class="fig"><img src="assets/print/nails_II.jpg"></div>
+      <div class="fig"><img src="assets/print/nails_III.jpg"></div>
     </div>
   </div>
 
 
-  <!-- ════ PAGE 6: INWARDS + BETTE2RAVE ════ -->
-  <div class="pg" style="display:flex;flex-direction:column;gap:2pt;">
-    <!-- INWARDS -->
-    <div style="padding:10mm 16mm 8mm;border-bottom:0.4pt solid var(--border);">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5mm;">
-        <div>
-          <p class="ch-label" style="margin-bottom:3pt;">CH 04 &mdash; INWARDS</p>
-          <h2 class="project-title glitch" data-text="Inwards" style="font-size:26pt;">Inwards</h2>
-        </div>
-        <p class="mono">VJ PACK · MARCH–APRIL 2026 · FOR INWARDS (UK)</p>
+  <!-- ════ PAGE 7: INWARDS ════ -->
+  <div class="pg">
+    <div class="head">
+      <div>
+        <p class="ch-label" style="margin-bottom:4pt;">CH 05 &nbsp;// VJ PACK</p>
+        <h2 class="project-title glitch" data-text="Inwards" style="font-size:38pt;">Inwards</h2>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2pt;">
-        <img src="assets/print/dl/inwards_snap1.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        <img src="assets/print/dl/inwards_snap2.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        <img src="assets/print/dl/inwards_snap3.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        <img src="assets/print/dl/inwards_snap4.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
+      <div class="head__meta">
+        <p class="mono" style="color:var(--accent);">FOR INWARDS · COMPOSER, UK</p>
+        <p class="mono">MARCH–APRIL 2026</p>
       </div>
     </div>
-    <!-- BETTE2RAVE -->
-    <div style="position:relative;overflow:hidden;flex:1;">
-      <img src="assets/print/dl/bette_photos_DSCF8815.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.85;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,7,0.96) 0%,rgba(8,8,7,0.3) 50%,transparent 100%);"></div>
-      <div style="position:absolute;top:5mm;left:6mm;">
-        <p class="ch-label">CH 05 &mdash; BETTE2RAVE</p>
-      </div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:6mm 8mm;">
-        <h2 class="project-title glitch" data-text="bette2rave" style="font-size:32pt;display:block;margin-bottom:4mm;">bette2rave</h2>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2pt;">
-          <img src="assets/print/bette_1.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-          <img src="assets/print/bette_2.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-          <img src="assets/print/bette_3.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-          <img src="assets/print/bette_4.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2pt;margin-top:2pt;">
-          <img src="assets/print/dl/bette_photos_DSCF8861.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-          <img src="assets/print/dl/bette_photos_DSCF8904.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-          <img src="assets/print/dl/bette_photos_DSCF9037.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-          <img src="assets/print/dl/bette_photos_DSCF9084.jpg" style="width:100%;aspect-ratio:16/9;object-fit:cover;">
-        </div>
-        <p class="mono" style="margin-top:4pt;">VJ SET · 25 APRIL 2026 · PARIS</p>
-      </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(2,1fr);gap:2pt;margin-top:8mm;flex:1;">
+      <div class="fig"><img src="assets/print/dl/inwards_snap1.jpg"></div>
+      <div class="fig"><img src="assets/print/dl/inwards_snap2.jpg"></div>
+      <div class="fig"><img src="assets/print/dl/inwards_snap3.jpg"></div>
+      <div class="fig"><img src="assets/print/dl/inwards_snap4.jpg"></div>
     </div>
   </div>
 
 
-  <!-- ════ PAGE 7: LIVE SETS ════ -->
-  <div class="pg" style="display:flex;flex-direction:column;">
-    <div style="padding:10mm 16mm 6mm;border-bottom:0.4pt solid var(--border);">
-      <p class="ch-label" style="margin-bottom:3pt;">CH 06 &mdash; 09 &nbsp;// LIVE VJ SETS</p>
-      <h2 class="project-title glitch" data-text="Setlist" style="font-size:26pt;">Setlist</h2>
+  <!-- ════ PAGE 8: BETTE2RAVE ════ -->
+  <div class="pg">
+    <div class="head">
+      <div>
+        <p class="ch-label" style="margin-bottom:4pt;">CH 06 &nbsp;// VJ SET</p>
+        <h2 class="project-title glitch" data-text="bette2rave" style="font-size:38pt;">bette2rave</h2>
+      </div>
+      <div class="head__meta">
+        <p class="mono" style="color:var(--accent);">25 APRIL 2026</p>
+        <p class="mono">PARIS · FR</p>
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2pt;flex:1;">
+    <div class="fig" style="flex:1.6;margin-top:7mm;"><img src="assets/print/dl/bette_photos_DSCF8815.jpg" style="object-position:center 30%;"></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2pt;margin-top:2pt;">
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/bette_1.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/bette_2.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/bette_3.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/bette_4.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/bette_photos_DSCF8861.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/bette_photos_DSCF8904.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/bette_photos_DSCF9037.jpg"></div>
+      <div class="fig" style="aspect-ratio:16/9;"><img src="assets/print/dl/bette_photos_DSCF9084.jpg"></div>
+    </div>
+  </div>
+
+
+  <!-- ════ PAGE 9: LIVE SETS ════ -->
+  <div class="pg">
+    <div class="head">
+      <div>
+        <p class="ch-label" style="margin-bottom:4pt;">CH 07 &mdash; 10 &nbsp;// LIVE VJ SETS</p>
+        <h2 class="project-title glitch" data-text="Setlist" style="font-size:30pt;">Setlist</h2>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:7mm 4mm;flex:1;margin-top:8mm;">
       <div class="set-cell">
-        <img src="assets/print/dl/poplar_snap.jpg">
-        <div class="set-cell__overlay"></div>
+        <div class="fig"><img src="assets/print/dl/poplar_snap.jpg"></div>
         <div class="set-cell__info">
-          <p class="set-cell__ch">CH 06</p>
-          <h3 class="set-cell__title glitch" data-text="Poplar Festival">Poplar Festival</h3>
+          <p class="set-cell__ch">CH 07</p>
+          <h3 class="set-cell__title">Poplar Festival</h3>
           <p class="set-cell__date">12–13 SEP 2025 · TRENTO, IT</p>
         </div>
       </div>
       <div class="set-cell">
-        <img src="assets/print/dl/osfn_snap.jpg">
-        <div class="set-cell__overlay"></div>
+        <div class="fig"><img src="assets/print/dl/osfn_snap.jpg"></div>
         <div class="set-cell__info">
-          <p class="set-cell__ch">CH 07</p>
-          <h3 class="set-cell__title glitch" data-text="One Size Fits None">One Size Fits None</h3>
+          <p class="set-cell__ch">CH 08</p>
+          <h3 class="set-cell__title">One Size Fits None</h3>
           <p class="set-cell__date">22 JUN 2025 · TRENTO, IT</p>
         </div>
       </div>
       <div class="set-cell">
-        <img src="assets/print/dl/pig_snap.jpg">
-        <div class="set-cell__overlay"></div>
+        <div class="fig"><img src="assets/print/dl/pig_snap.jpg"></div>
         <div class="set-cell__info">
-          <p class="set-cell__ch">CH 08</p>
-          <h3 class="set-cell__title glitch" data-text="Follow the Pig">Follow the Pig</h3>
+          <p class="set-cell__ch">CH 09</p>
+          <h3 class="set-cell__title">Follow the Pig</h3>
           <p class="set-cell__date">12 JUL 2025 · TRENTO, IT</p>
         </div>
       </div>
       <div class="set-cell">
-        <img src="assets/print/dl/mesiano_snap.jpg">
-        <div class="set-cell__overlay"></div>
+        <div class="fig"><img src="assets/print/dl/mesiano_snap.jpg"></div>
         <div class="set-cell__info">
-          <p class="set-cell__ch">CH 09</p>
-          <h3 class="set-cell__title glitch" data-text="Mesiano 2025">Mesiano 2025</h3>
+          <p class="set-cell__ch">CH 10</p>
+          <h3 class="set-cell__title">Mesiano 2025</h3>
           <p class="set-cell__date">10 MAY 2025 · FEELTHEF · TRENTO, IT</p>
         </div>
       </div>
@@ -457,20 +460,13 @@
   </div>
 
 
-  <!-- ════ PAGE 8: ABOUT + CONTACT ════ -->
-  <div class="pg" style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
-    <div style="position:relative;overflow:hidden;">
-      <img src="assets/print/dl/about_portrait.jpg" style="width:100%;height:100%;object-fit:cover;filter:grayscale(25%) contrast(1.06);">
-      <div style="position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,rgba(8,8,7,0.9) 100%);"></div>
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,7,0.5) 0%,transparent 50%);"></div>
-      <div style="position:absolute;bottom:10mm;left:8mm;">
-        <p class="ch-label" style="margin-bottom:5pt;">SIGNAL // ABOUT</p>
-        <h2 class="project-title" style="font-size:24pt;color:var(--text);">Matteo<br>Scandola</h2>
-      </div>
-    </div>
-    <div style="display:flex;flex-direction:column;justify-content:space-between;padding:16mm 14mm;background:var(--bg);">
+  <!-- ════ PAGE 10: ABOUT + CONTACT ════ -->
+  <div class="pg pg--bleed" style="flex-direction:row;">
+    <div class="fig" style="flex:1;"><img src="assets/print/dl/about_portrait.jpg" style="filter:grayscale(25%) contrast(1.06);"></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between;padding:16mm 14mm;">
       <div>
-        <p class="ch-label" style="margin-bottom:10mm;">m.code</p>
+        <p class="ch-label" style="margin-bottom:6mm;">SIGNAL // ABOUT</p>
+        <h2 class="project-title" style="font-size:30pt;margin-bottom:10mm;">Matteo<br>Scandola</h2>
         <div class="desc">
           <p>Matteo Scandola aka m.code (Verona, 1998) is a visual artist and researcher based in Paris, exploring emergence, feedback, and spatial relationships through real-time audiovisual systems.</p>
           <p>With a background in physics, he later shifted his focus toward audiovisual art through the discovery of TouchDesigner. His work investigates how structure and complexity can emerge from interaction, motion, and accumulation through experiments with code and algorithms.</p>
