@@ -13,18 +13,48 @@ if (coordsEl) {
 
 // ─── Lazy video play/pause ────────────────────────────────────────────────────
 // Videos marked data-lazy start with preload="none" and no autoplay.
-// They begin playing when within 300px of the viewport and pause when leaving.
+// Desktop: they play within 300px of the viewport and pause when leaving.
+// Phones/tablets: they use small "-m.mp4" encodes and only the 2 most central
+// visible videos play at once (many decoding streams make iOS Safari reload).
+const MOBILE = window.matchMedia('(max-width: 800px), (pointer: coarse)').matches;
+
+if (MOBILE) {
+  document.querySelectorAll('video source[src$=".mp4"]').forEach((s) => {
+    s.src = s.getAttribute('src').replace(/\.mp4$/, '-m.mp4');
+  });
+}
+
+const visibleVideos = new Set();
+function rebalanceVideos() {
+  const mid = window.innerHeight / 2;
+  const ranked = [...visibleVideos].sort((a, b) => {
+    const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+    return Math.abs((ra.top + ra.bottom) / 2 - mid) - Math.abs((rb.top + rb.bottom) / 2 - mid);
+  });
+  ranked.forEach((v, i) => {
+    if (i < 2) {
+      if (v.readyState === 0) v.load();
+      v.play().catch(() => {});
+    } else {
+      v.pause();
+    }
+  });
+}
+
 const videoObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     const v = entry.target;
-    if (entry.isIntersecting) {
+    if (MOBILE) {
+      if (entry.isIntersecting) visibleVideos.add(v); else { visibleVideos.delete(v); v.pause(); }
+    } else if (entry.isIntersecting) {
       if (v.readyState === 0) v.load();   // kick off load if untouched
       v.play().catch(() => {});            // silently ignore autoplay blocks
     } else {
       v.pause();
     }
   });
-}, { rootMargin: '300px 0px' });
+  if (MOBILE) rebalanceVideos();
+}, MOBILE ? { threshold: 0.35 } : { rootMargin: '300px 0px' });
 
 document.querySelectorAll('video[data-lazy]').forEach((v) => videoObserver.observe(v));
 
@@ -302,6 +332,8 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
   const CURSOR_LINK = 240;   // px — cursor connection distance
   let pts = [], W = 0, H = 0, canvasTop = 0, introVisible = true;
   const mouse = { x: -1e4, y: -1e4 };
+  let touching = false;   // a finger is on the screen
+  let autoAgent = false;  // touch devices: a drifting agent stands in for the cursor
 
   function sizeCanvas() {
     if (!canvas) return;
@@ -319,9 +351,14 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
     }));
   }
 
-  function drawField() {
+  function drawField(now) {
     ctx.clearRect(0, 0, W, H);
-    const mx = mouse.x, my = mouse.y - (canvasTop - window.scrollY);
+    let mx = mouse.x, my = mouse.y - (canvasTop - window.scrollY);
+    if (autoAgent && !touching) {
+      // no cursor on touch screens: an agent wanders the field on its own
+      mx = W * (0.5 + 0.34 * Math.cos(now * 0.00055));
+      my = H * (0.45 + 0.22 * Math.sin(now * 0.0008));
+    }
 
     for (const p of pts) {
       if (!reduced) {
@@ -359,7 +396,7 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
     }
 
     // cursor-to-point connections — the visitor as an agent, in accent
-    if (finePointer && mx > -100 && my > -100 && my < H + 100) {
+    if ((finePointer || touching || autoAgent) && mx > -100 && my > -100 && my < H + 100) {
       let linked = false;
       for (const p of pts) {
         const dx = p.x - mx, dy = p.y - my;
@@ -388,13 +425,30 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
 
   if (canvas) {
     sizeCanvas(); seedPoints();
-    window.addEventListener('resize', () => { sizeCanvas(); seedPoints(); });
+    let lastWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+      // mobile browsers fire resize when the toolbar collapses; only a width
+      // change should re-seed, otherwise the field jumps while scrolling
+      const widthChanged = window.innerWidth !== lastWidth;
+      lastWidth = window.innerWidth;
+      sizeCanvas();
+      if (widthChanged) seedPoints();
+    });
     new IntersectionObserver((entries) => {
       introVisible = entries[0].isIntersecting;
     }).observe(canvas);
   }
 
   document.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+  if (!finePointer && canvas && !reduced) {
+    autoAgent = true;
+    const follow = (e) => { touching = true; mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; };
+    document.addEventListener('touchstart', follow, { passive: true });
+    document.addEventListener('touchmove', follow, { passive: true });
+    document.addEventListener('touchend', () => { touching = false; mouse.x = -1e4; mouse.y = -1e4; }, { passive: true });
+    document.addEventListener('touchcancel', () => { touching = false; }, { passive: true });
+  }
 
   // — 2. Presence echoes —
   const ECHO_DELAYS = [300, 600, 900]; // ms behind the cursor
@@ -469,8 +523,8 @@ document.querySelectorAll('.setlist__item').forEach((item) => {
   // — shared loop —
   let lastParallaxY = -1;
   function loop(now) {
-    if (canvas && introVisible) drawField();
-    if (!reduced) {
+    if (canvas && introVisible) drawField(now);
+    if (!reduced && finePointer) {
       drawEchoes(now);
       drawInterference();
       if (window.scrollY !== lastParallaxY) {
